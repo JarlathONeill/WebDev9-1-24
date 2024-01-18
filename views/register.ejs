@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Pulse</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikiticons.min.js"></script>
+</head>
+
+<body>
+    <div class="uk-section">
+        <div class="uk-container">
+
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+
+                <div class="uk-navbar-left">
+                    <img src="">
+
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-parent"><a href="/">Home</a></li>
+                        <li class="uk-active"><a href="/new">Add Snapshot</a></li>
+                        <li class="uk-parent"><a href="">Dashboard</a></li>
+
+                        <li class="uk-parent"><a href="">Register</a></li>
+                        <li class="uk-parent"><a href="">Login</a></li>
+                        <li class="uk-parent"><a href="">Logout</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="uk-section uk-background-muted">
+        <div class="uk-container">
+
+            <form onsubmit="return false;" id="form">
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email address</label>
+                  <input type="email" class="form-control" id="email" autocomplete="off" required>
+                  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" autocomplete="off" required>
+                </div>
+                <div class="alert alert-danger" role="alert" id="error" style="display: none;"></div>
+                <div class="alert alert-success" role="alert" id="success" style="display: none;">Success</div>
+                <button type="submit" class="btn btn-primary">Register</button>
+              </form>
+
+              <form class="uk-form-horizontal uk-margin-large">
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="form-horizontal-text">Email</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="form-horizontal-text" type="text" placeholder="Your email...">
+                    </div>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="form-horizontal-text">Password</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="form-horizontal-text" type="text" placeholder="Your password...">
+                    </div>
+                </div>
+
+
+
+              </form>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Pulse</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikiticons.min.js"></script>
+</head>
+
+<body>
+    <div class="uk-section">
+        <div class="uk-container">
+
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+
+                <div class="uk-navbar-left">
+                    <img src="">
+
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-parent"><a href="/">Home</a></li>
+                        <li class="uk-active"><a href="/new">Add Snapshot</a></li>
+                        <li class="uk-parent"><a href="">Dashboard</a></li>
+
+                        <li class="uk-parent"><a href="/register">Register</a></li>
+                        <li class="uk-parent"><a href="">Login</a></li>
+                        <li class="uk-parent"><a href="">Logout</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="uk-section uk-background-muted">
+        <div class="uk-container">
+
+            <form method="post" action="/new" class="uk-form-horizontal" uk-grid>
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="form-horizontal-select">Anger</label>
+                    <div class="uk-form-controls">
+                        <select class="uk-select" id="form-horizontal-select">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="uk-width-3-4@s">
+                    <input class="uk-input" name="new_context" type="text" placeholder="Enter some context details..." required>
+                </div>
+                
+                <div class="uk-width-1-4@s">
+                    <input class="uk-input" name="new_date" type="datetime-local" required>
+                </div>
+
+                <div class="uk-width-1-4@s">
+                    <div uk-form-custom>
+                        <button class="uk-button uk-button-primary uk-button-large">Add</button>
+                    </div>
+                </div>
+            </form>
+</body>
+</html>

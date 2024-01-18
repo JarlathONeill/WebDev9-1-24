@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Pulse</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikiticons.min.js"></script>
+</head>
+
+<body>
+    <div class="uk-section">
+        <div class="uk-container">
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+                <div class="uk-navbar-left">
+                    <img src="">
+
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-active"><a href="/">Home</a></li>
+                        <li class="uk-parent"><a href="/new">Add Snapshot</a></li>
+                        <li class="uk-parent"><a href="">Dashboard</a></li>
+
+                        <li class="uk-parent"><a href="/register">Register</a></li>
+                        <li class="uk-parent"><a href="">Login</a></li>
+                        <li class="uk-parent"><a href="">Logout</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="uk-section uk-background-muted">
+        <div class="uk-container">
+            <h2 class="uk-heading-small uk-text-left">My Snapshots</h2>
+            <div class="uk-child-width-1-2@s uk-grid-match" uk-grid>
+                    <% schedule.forEach((row)=> { %>
+                    <% var snapshotid = row.id; %>
+                        <div>
+                            <div class='uk-card uk-card-body uk-card-default'>
+                                <h3 class='uk-card-title'><%= row.date_time_record %></h3>
+                                <%= row.context_trigger %>
+                                </div>
+                        </div>
+                        <% }); %>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
