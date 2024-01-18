@@ -38,6 +38,7 @@ exports.selectRun =  (req, res) => {
 exports.postNewUser = (req, res) => {
     const { email, password} = req.body;
     const vals = [email, password];
+    console.log(vals);
 
     const insertSQL = 'INSERT into user (email, password) VALUES (?, ?)';
 
@@ -57,7 +58,7 @@ exports.postNewRun = (req, res) => {
 
     const insertSQL = 'INSERT INTO emotiondata (context_trigger, date_time_record) VALUES (?, ?)';
 
-    conn.query(insertSQL, vals, (err, rows) => {
+    conn.query(insertSQL, vals, (err, results) => {
         if(err) {
             throw err;
         } else {

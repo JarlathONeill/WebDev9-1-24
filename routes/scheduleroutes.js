@@ -10,5 +10,6 @@ router.get('/edit/:id', controller.selectRun);
 router.post('/new', controller.postNewRun);
 router.post('/edit/:id', controller.updateRun);
 router.post('/del/:id', controller.deleteRun);
+router.post('/register', controller.postNewUser);
 
 module.exports = router;
