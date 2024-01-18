@@ -36,7 +36,7 @@
     <div class="uk-section uk-background-muted">
         <div class="uk-container">
 
-            <form onsubmit="return false;" id="form">
+            <!--<form onsubmit="return false;" id="form">
                 <div class="mb-3">
                   <label for="email" class="form-label">Email address</label>
                   <input type="email" class="form-control" id="email" autocomplete="off" required>
@@ -49,24 +49,24 @@
                 <div class="alert alert-danger" role="alert" id="error" style="display: none;"></div>
                 <div class="alert alert-success" role="alert" id="success" style="display: none;">Success</div>
                 <button type="submit" class="btn btn-primary">Register</button>
-              </form>
+              </form> -->
 
               <form class="uk-form-horizontal uk-margin-large">
                 <div class="uk-margin">
                     <label class="uk-form-label" for="form-horizontal-text">Email</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" id="form-horizontal-text" type="text" placeholder="Your email...">
+                        <input class="uk-input" name="email" type="text" placeholder="Your email...">
                     </div>
                 </div>
 
                 <div class="uk-margin">
                     <label class="uk-form-label" for="form-horizontal-text">Password</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" id="form-horizontal-text" type="text" placeholder="Your password...">
+                        <input class="uk-input" name="password" type="text" placeholder="Your password...">
                     </div>
                 </div>
 
-
+                <button class="uk-button uk-button-secondary uk-width-1-1">Submit</button>
 
               </form>
 </body>
