@@ -11,14 +11,65 @@ exports.getSchedule = (req, res) => {
     });
 };
 
+exports.getRegister = (req, res) => {
+    res.render('register');
+};
+
+exports.postRegister = (req, res) => {
+    const { user_id, email, password} = req.body;
+    const vals = [user_id, email, password];
+    console.log(vals);
+
+    const insertSQL = 'INSERT into user (user_id, email, password) VALUES (NULL, ?, ?)';
+
+    conn.query(insertSQL, vals, (err, rows) => {
+        if (err) {
+            throw err;
+        } else {
+            res.redirect('/');
+        }
+    });
+};
+
+
+
+exports.getLogin = (req, res) => {
+    res.render('login');
+};
+
+exports.postLogin = (req, res) => {
+    const { email, userpass } = req.body;
+    const vals = [ email, userpass ];
+    console.log(vals);
+
+    const checkuserSQL = `SELECT * FROM user WHERE email = ? AND password = ?`;
+
+    conn.query( checkuserSQL, vals, (err, rows) => {
+        if (err) throw err;
+
+        const numrows = rows.length;
+        console.log(numrows); 
+        if (numrows > 0) {
+            console.log(rows);
+            res.redirect('/');
+        } else {
+            res.redirect('/');
+        }
+    });
+};
+
+
+
+
+
+
+
 exports.getAddNewRun =  (req, res) => {
     res.render('addsnapshot');
     console.log(req.body);
 };
 
-exports.getRegister = (req, res) => {
-    res.render('register');
-}
+
 
 
 exports.selectRun =  (req, res) => {
@@ -35,21 +86,7 @@ exports.selectRun =  (req, res) => {
     });
 };
 
-exports.postNewUser = (req, res) => {
-    const { email, password} = req.body;
-    const vals = [email, password];
-    console.log(vals);
 
-    const insertSQL = 'INSERT into user (email, password) VALUES (?, ?)';
-
-    conn.query(insertSQL, vals, (err, rows) => {
-        if (err) {
-            throw err;
-        } else {
-            res.redirect('/');
-        }
-    });
-}
 
 
 exports.postNewRun = (req, res) => {

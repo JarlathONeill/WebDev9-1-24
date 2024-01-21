@@ -31,22 +31,30 @@
             </nav>
         </div>
     </div>
+
     <div class="uk-section uk-background-muted">
         <div class="uk-container">
-            <h2 class="uk-heading-small uk-text-left">My Snapshots</h2>
-            <div class="uk-child-width-1-2@s uk-grid-match" uk-grid>
-                    <% schedule.forEach((row)=> { %>
-                    <% var snapshotid = row.id; %>
-                        <div>
-                            <div class='uk-card uk-card-body uk-card-default'>
-                                <h3 class='uk-card-title'><%= row.date_time_record %></h3>
-                                <%= row.context_trigger %>
-                                </div>
-                        </div>
-                        <% }); %>
-            </div>
+
+            <form method="post" action="/login" class="uk-grid-small" uk-grid>
+                <div class="uk-width-1-2@s">
+                    <input class="uk-input" name="email" type="text" placeholder="Email Address" required>
+                </div>
+
+                <div class="uk-width-1-2@s">
+                    <input class="uk-input" name="userpass" type="password" placeholder="Password" required>
+                </div>
+
+                <div class="uk-width-1-4@s">
+                    <div uk-form-custom>
+                        <button class="uk-button uk-button-default uk-button-large">Login</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+
+
+
 
 </body>
 

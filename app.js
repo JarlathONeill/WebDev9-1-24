@@ -1,10 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv').config({ path: './config.env' });
-//const conn = require('./utils/dbconn');
 const router = require('./routes/scheduleroutes');
 const path = require('path');
-//const PORT = 3000;
 
 const app = express();
 
