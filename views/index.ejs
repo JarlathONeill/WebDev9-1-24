@@ -17,15 +17,19 @@
             <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
                 <div class="uk-navbar-left">
                     <img src="">
-
                     <ul class="uk-navbar-nav">
                         <li class="uk-active"><a href="/">Home</a></li>
-                        <li class="uk-parent"><a href="/new">Add Snapshot</a></li>
-                        <li class="uk-parent"><a href="">Dashboard</a></li>
+                        <% if (loggedin) { %>
+                            <li class="uk-parent"><a href="/new">Add Snapshot</a></li>
+                            <li class="uk-parent"><a href="">Dashboard</a></li>
+                            <li class="uk-parent"><a href="/logout">Logout</a></li>
+                        <% } %>
 
-                        <li class="uk-parent"><a href="/register">Register</a></li>
-                        <li class="uk-parent"><a href="/login">Login</a></li>
-                        <li class="uk-parent"><a href="">Logout</a></li>
+                        <% if (!loggedin) { %>
+                            <li class="uk-parent"><a href="/register">Register</a></li>
+                            <li class="uk-parent"><a href="/login">Login</a></li>
+                        <% } %>
+                            
                     </ul>
                 </div>
             </nav>

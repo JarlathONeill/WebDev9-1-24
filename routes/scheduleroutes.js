@@ -3,11 +3,12 @@ const controller = require('./../controllers/schedulecontrollers');
 const conn = require('../utils/dbconn');
 const router = express.Router();
 
-router.get('/', controller.getSchedule);
+router.get('/', controller.getHome);
 router.get('/new', controller.getAddNewRun);
 router.get('/register', controller.getRegister);
 router.get('/edit/:id', controller.selectRun);
 router.get('/login', controller.getLogin);
+router.get('/logout', controller.getLogout);
 
 
 

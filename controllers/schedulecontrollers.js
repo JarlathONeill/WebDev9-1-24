@@ -1,18 +1,31 @@
 const conn = require('./../utils/dbconn');
 
-exports.getSchedule = (req, res) => {
+exports.getHome = (req, res) => {
+
+    const session = req.session;
+    console.log(session);
+
+    const { isloggedin } = req.session;
+    console.log(`USer logged in: ${isloggedin}`);
+
     const selectSQL = 'SELECT * FROM emotiondata';
     conn.query(selectSQL, (err, rows) => {
         if (err) {
             throw err;
         } else {
-            res.render('index', { schedule: rows});
+            res.render('index', { schedule: rows, loggedin: isloggedin});
         }
     });
 };
 
 exports.getRegister = (req, res) => {
-    res.render('register');
+    const session = req.session;
+    console.log(session);
+
+    const { isloggedin } = req.session;
+    console.log(`USer logged in: ${isloggedin}`);
+
+    res.render('register', { loggedin: isloggedin});
 };
 
 exports.postRegister = (req, res) => {
@@ -34,10 +47,19 @@ exports.postRegister = (req, res) => {
 
 
 exports.getLogin = (req, res) => {
-    res.render('login');
+    const session = req.session;
+    console.log(session);
+
+    const { isloggedin } = req.session;
+    console.log(`USer logged in: ${isloggedin}`);
+
+    res.render('login', { loggedin: isloggedin });
 };
 
 exports.postLogin = (req, res) => {
+    const session = req.session;
+    console.log(session);
+
     const { email, userpass } = req.body;
     const vals = [ email, userpass ];
     console.log(vals);
@@ -51,6 +73,9 @@ exports.postLogin = (req, res) => {
         console.log(numrows); 
         if (numrows > 0) {
             console.log(rows);
+            const session = req.session;
+            session.isloggedin = true;
+            console.log(session);
             res.redirect('/');
         } else {
             res.redirect('/');
@@ -58,7 +83,11 @@ exports.postLogin = (req, res) => {
     });
 };
 
-
+exports.getLogout = (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
+};
 
 
 
