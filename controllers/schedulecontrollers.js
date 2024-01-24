@@ -28,20 +28,31 @@ exports.getRegister = (req, res) => {
     res.render('register', { loggedin: isloggedin});
 };
 
-exports.postRegister = (req, res) => {
+exports.postRegister = async (req, res) => {
     const { user_id, email, password} = req.body;
-    const vals = [user_id, email, password];
-    console.log(vals);
+    const vals = [email, password];
+    const insertSQL = 'INSERT into user (email, password) VALUES (?, ?)';
+    
+    if(!email || !password) return res.json({status:"error", error: "Please enter your email and password"});
 
-    const insertSQL = 'INSERT into user (user_id, email, password) VALUES (NULL, ?, ?)';
+    else {
+        console.log(email);
 
-    conn.query(insertSQL, vals, (err, rows) => {
-        if (err) {
-            throw err;
-        } else {
-            res.redirect('/');
-        }
-    });
+        conn.query(insertSQL, vals, async (err, rows) => {
+            if (err) {
+                throw err;
+            } else if (result[0]) {
+                return res.json({status: "error", error: "Email has already been registered"})
+            }
+            else {
+                res.redirect('/');
+            }
+        });
+    }
+
+
+
+
 };
 
 
