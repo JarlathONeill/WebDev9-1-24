@@ -9,6 +9,7 @@ router.get('/register', controller.getRegister);
 router.get('/edit/:id', controller.selectRun);
 router.get('/login', controller.getLogin);
 router.get('/logout', controller.getLogout);
+router.get('/dashboard', controller.getDashboard);
 
 
 
