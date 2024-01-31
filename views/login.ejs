@@ -26,6 +26,9 @@
               <li class="nav-item">
                 <a class="nav-link active" href="/login">Login</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/register">Register</a>
+            </li>
               <% } %>
               <% if (loggedin) { %>
               <li class="nav-item dropdown">
@@ -34,7 +37,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="#">Add</a></li>
-                  <li><a class="dropdown-item" href="#">Dashboard</a></li>
+                  <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
                   <li><hr class="dropdown-divider"></li>
                 </ul>
               </li>
