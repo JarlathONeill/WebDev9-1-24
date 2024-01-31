@@ -1,39 +1,78 @@
 const conn = require('./../utils/dbconn');
 
 exports.getHome = (req, res) => {
-
-    const session = req.session;
-    console.log(session);
-
     const { isloggedin } = req.session;
-    console.log(`USer logged in: ${isloggedin}`);
+    console.log(`User logged in: ${isloggedin}`);
 
-    const selectSQL = 'SELECT * FROM emotiondata';
-    conn.query(selectSQL, (err, rows) => {
-        if (err) {
-            throw err;
-        } else {
-            res.render('index', { schedule: rows, loggedin: isloggedin});
-        }
-    });
+    res.render('index', { loggedin: isloggedin });
+
+ 
 };
+
+exports.getDashboard = (req, res) => {
+    var userinfo = {};
+
+    //const session = req.session;
+    //console.log(session);
+
+    const { isloggedin, userid } = req.session;
+    console.log(`User logged in: ${isloggedin}, ${userid}`);
+
+    
+    if (isloggedin) {
+        const getuserSQL = `SELECT user.first_name
+        FROM user
+        INNER JOIN emotiondata ON
+        user.user_id =
+        emotiondata.user_id
+        WHERE user.user_id = '${userid}'`;
+
+        conn.query(getuserSQL, (err, rows) => {
+            
+            if (err) throw err;
+            
+            console.log(rows);
+            const username = rows[0].first_name;
+            const session = req.session;
+            session.name = username;
+            userinfo = { name: username };
+            console.log(userinfo);
+            
+
+        });
+        
+
+
+        const selectSQL = 'SELECT * FROM emotiondata';
+        conn.query(selectSQL, (err, rows) => {
+            if (err) {
+                throw err;
+            } else {
+                res.render('dashboard', { records: rows, loggedin: isloggedin, user: userinfo });
+            }
+        });
+    };
+
+
+}
+
 
 exports.getRegister = (req, res) => {
     const session = req.session;
     console.log(session);
 
     const { isloggedin } = req.session;
-    console.log(`USer logged in: ${isloggedin}`);
+    console.log(`User logged in: ${isloggedin}`);
 
-    res.render('register', { loggedin: isloggedin});
+    res.render('register', { loggedin: isloggedin });
 };
 
 exports.postRegister = async (req, res) => {
-    const { user_id, email, password} = req.body;
+    const { user_id, email, password } = req.body;
     const vals = [email, password];
     const insertSQL = 'INSERT into user (email, password) VALUES (?, ?)';
-    
-    if(!email || !password) return res.json({status:"error", error: "Please enter your email and password"});
+
+    if (!email || !password) return res.json({ status: "error", error: "Please enter your email and password" });
 
     else {
         console.log(email);
@@ -42,17 +81,13 @@ exports.postRegister = async (req, res) => {
             if (err) {
                 throw err;
             } else if (result[0]) {
-                return res.json({status: "error", error: "Email has already been registered"})
+                return res.json({ status: "error", error: "Email has already been registered" })
             }
             else {
                 res.redirect('/');
             }
         });
     }
-
-
-
-
 };
 
 
@@ -62,32 +97,35 @@ exports.getLogin = (req, res) => {
     console.log(session);
 
     const { isloggedin } = req.session;
-    console.log(`USer logged in: ${isloggedin}`);
+    console.log(`User logged in: ${isloggedin}`);
 
     res.render('login', { loggedin: isloggedin });
 };
+
 
 exports.postLogin = (req, res) => {
     const session = req.session;
     console.log(session);
 
     const { email, userpass } = req.body;
-    const vals = [ email, userpass ];
+    const vals = [ email, userpass];
     console.log(vals);
 
-    const checkuserSQL = `SELECT * FROM user WHERE email = ? AND password = ?`;
+    const checkuserSQL = `SELECT user_id FROM user WHERE user.email = '${email}'`;
 
-    conn.query( checkuserSQL, vals, (err, rows) => {
+    conn.query(checkuserSQL, vals, (err, rows) => {
         if (err) throw err;
 
         const numrows = rows.length;
-        console.log(numrows); 
+        console.log(numrows);
+
         if (numrows > 0) {
             console.log(rows);
             const session = req.session;
             session.isloggedin = true;
+            session.userid = rows[0].user_id;
             console.log(session);
-            res.redirect('/');
+            res.redirect('dashboard');
         } else {
             res.redirect('/');
         }
@@ -104,7 +142,7 @@ exports.getLogout = (req, res) => {
 
 
 
-exports.getAddNewRun =  (req, res) => {
+exports.getAddNewRun = (req, res) => {
     res.render('addsnapshot');
     console.log(req.body);
 };
@@ -112,7 +150,7 @@ exports.getAddNewRun =  (req, res) => {
 
 
 
-exports.selectRun =  (req, res) => {
+exports.selectRun = (req, res) => {
     const { id } = req.params;
 
     const selectSQL = `SELECT * FROM runschedule WHERE id = ${id}`;
@@ -121,7 +159,7 @@ exports.selectRun =  (req, res) => {
             throw err;
         } else {
             console.log(rows);
-            res.render('editschedule', { details: rows});
+            res.render('editschedule', { details: rows });
         }
     });
 };
@@ -136,7 +174,7 @@ exports.postNewRun = (req, res) => {
     const insertSQL = 'INSERT INTO emotiondata (context_trigger, date_time_record) VALUES (?, ?)';
 
     conn.query(insertSQL, vals, (err, results) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
             res.redirect('/');
@@ -152,7 +190,7 @@ exports.updateRun = (req, res) => {
 
     const run_id = req.params.id;
     const { run_details, run_date } = req.body;
-    const vals = [ run_details, run_date, run_id ];
+    const vals = [run_details, run_date, run_id];
     console.log(vals);
 
     const updateSQL = 'UPDATE runschedule SET items = ?, mydate = ? WHERE id = ?';
