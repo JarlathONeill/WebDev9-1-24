@@ -84,9 +84,10 @@
                                 </div>
 
                                 <!-- Password input -->
+                                <!-- Needs a confirm password input-->
                                 <div class="form-outline mb-4">
                                     <input type="password" id="form2Example2" class="form-control" name="userpass" />
-                                    <label class="form-label" for="form2Example2">Password</label>
+                                    <label class="form-label" for="form2Example2" autocomplete="off">Password</label>
                                 </div>
 
                                 <!-- 2 column grid layout for inline styling -->
@@ -96,6 +97,8 @@
 
 
                                     <!-- Submit button -->
+                                    <div class="alert alert-danger" role="alert" id="error" style="display: none;"></div>
+                                    <div class="alert alert-success" role="alert" id="success" style="display: none;"></div>
                                     <button class="btn btn-primary btn-block mb-4">Register</button>
 
                             </form>
