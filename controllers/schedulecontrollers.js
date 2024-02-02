@@ -6,7 +6,7 @@ exports.getHome = (req, res) => {
 
     res.render('index', { loggedin: isloggedin });
 
- 
+
 };
 
 exports.getDashboard = (req, res) => {
@@ -18,26 +18,26 @@ exports.getDashboard = (req, res) => {
     const { isloggedin, userid } = req.session;
     console.log(`User logged in: ${isloggedin}, ${userid}`);
 
-    
+
     if (isloggedin) {
         const getuserSQL = `SELECT user.first_name
         FROM user
         WHERE user.user_id = '${userid}'`;
 
         conn.query(getuserSQL, (err, rows) => {
-            
+
             if (err) throw err;
-            
+
             console.log(rows);
             const username = rows[0].first_name;
             const session = req.session;
             session.name = username;
             userinfo = { name: username };
             console.log(userinfo);
-            
+
 
         });
-        
+
 
 
         const selectSQL = `SELECT * FROM emotiondata WHERE emotiondata.user_id = ${userid}`;
@@ -64,24 +64,41 @@ exports.getRegister = (req, res) => {
     res.render('register', { loggedin: isloggedin });
 };
 
-exports.postRegister =  (req, res) => {
-    const {firstname, lastname,  email, userpass } = req.body;
-    const vals = [firstname, lastname, email, userpass];
+exports.postRegister = (req, res) => {
+    const session = req.session;
+    //const { isloggedin } = req.session;
+    const isloggedin = false;
+    //res.render('register', { loggedin: isloggedin });
 
-    //if 
+
+
+
+    const { firstname, lastname, email, userpass } = req.body;
+    const vals = [firstname, lastname, email, userpass];
+    
+    const novals = "Please enter your first name, last name, email and password";
+
 
     const insertSQL = 'INSERT into user (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
 
-    conn.query(insertSQL, vals, async (err, rows) => {
-        if (err) throw err;
-        //console.log(vals);
+    if (!firstname || !lastname || !email || !userpass) return res.render('register', {loggedin: false, error: vals });
 
-        res.redirect('login');
+   //if (!firstname || !lastname || !email || !userpass) return res.json({ error: "Please enter your first name, last name, email and password" });
 
-    });
+    else {
 
-    const session = req.session;
-    console.log(session);
+        conn.query(insertSQL, vals, async (err, rows) => {
+            if (err) throw err;
+            //console.log(vals);
+
+            res.redirect('login');
+
+        });
+
+        const session = req.session;
+        console.log(session);
+
+    };
 
     //if (!email || !password) return res.json({ status: "error", error: "Please enter your email and password" });
 
@@ -120,7 +137,7 @@ exports.postLogin = (req, res) => {
     console.log(session);
 
     const { email, userpass } = req.body;
-    const vals = [ email, userpass];
+    const vals = [email, userpass];
     console.log(vals);
 
     const checkuserSQL = `SELECT user_id FROM user WHERE user.email = '${email}'`;
