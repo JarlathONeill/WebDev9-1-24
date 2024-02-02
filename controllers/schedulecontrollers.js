@@ -67,13 +67,28 @@ exports.getRegister = (req, res) => {
     res.render('register', { loggedin: isloggedin });
 };
 
-exports.postRegister = async (req, res) => {
-    const { user_id, email, password } = req.body;
-    const vals = [email, password];
-    const insertSQL = 'INSERT into user (email, password) VALUES (?, ?)';
+exports.postRegister =  (req, res) => {
+    const {firstname, lastname,  email, userpass } = req.body;
+    const vals = [firstname, lastname, email, userpass];
 
-    if (!email || !password) return res.json({ status: "error", error: "Please enter your email and password" });
+    //if 
 
+    const insertSQL = 'INSERT into user (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
+
+    conn.query(insertSQL, vals, async (err, rows) => {
+        if (err) throw err;
+        //console.log(vals);
+
+        res.redirect('login');
+
+    });
+
+    const session = req.session;
+    console.log(session);
+
+    //if (!email || !password) return res.json({ status: "error", error: "Please enter your email and password" });
+
+    /*
     else {
         console.log(email);
 
@@ -87,7 +102,7 @@ exports.postRegister = async (req, res) => {
                 res.redirect('/');
             }
         });
-    }
+    }*/
 };
 
 
@@ -125,7 +140,7 @@ exports.postLogin = (req, res) => {
             session.isloggedin = true;
             session.userid = rows[0].user_id;
             console.log(session);
-            res.redirect('dashboard');
+            res.redirect('/');
         } else {
             res.redirect('/');
         }
