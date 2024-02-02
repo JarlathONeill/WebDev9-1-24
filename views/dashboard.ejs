@@ -74,6 +74,7 @@
                         <% } %>
 
                         
+                        <% if (loggedin) { %>
                         <div class="mb-md-5 mt-md-4 pb-5">
                             <div class="card-body">
                                 
@@ -96,6 +97,15 @@
                                 </div>
                             </div>
                             <% }); %>
+                            <% } else { %>
+                           
+                                <div class="mb-md-5 mt-md-4 pb-5">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Please create some snapshots</h5>
+                                    </div>
+                                </div>
+                                <% } %>
+                            
                             </div>
 
                         </div>
