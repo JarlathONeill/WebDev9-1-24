@@ -22,9 +22,6 @@ exports.getDashboard = (req, res) => {
     if (isloggedin) {
         const getuserSQL = `SELECT user.first_name
         FROM user
-        INNER JOIN emotiondata ON
-        user.user_id =
-        emotiondata.user_id
         WHERE user.user_id = '${userid}'`;
 
         conn.query(getuserSQL, (err, rows) => {
@@ -43,7 +40,7 @@ exports.getDashboard = (req, res) => {
         
 
 
-        const selectSQL = 'SELECT * FROM emotiondata';
+        const selectSQL = `SELECT * FROM emotiondata WHERE emotiondata.user_id = ${userid}`;
         conn.query(selectSQL, (err, rows) => {
             if (err) {
                 throw err;
