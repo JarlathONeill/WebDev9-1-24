@@ -97,8 +97,11 @@
 
 
                                     <!-- Submit button -->
-                                    <div class="alert alert-danger" role="alert" id="error" style="display: none;"></div>
-                                    <div class="alert alert-success" role="alert" id="success" style="display: none;"></div>
+                                    <% if (!loggedin) { %>
+                                        <% var errmsg= 'test'; %>
+                                    <div class="alert alert-danger" role="alert" id="error" style="display: none;"><%= errmsg %></div>
+                                    <div class="alert alert-success" role="alert" id="success" style="display: none;"><% errmsg %></div>
+                                    <% } %>
                                     <button class="btn btn-primary btn-block mb-4">Register</button>
 
                             </form>
