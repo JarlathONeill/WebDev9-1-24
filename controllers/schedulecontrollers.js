@@ -66,58 +66,75 @@ exports.getRegister = (req, res) => {
 
 exports.postRegister = (req, res) => {
     const session = req.session;
-    //const { isloggedin } = req.session;
-    const isloggedin = false;
-    //res.render('register', { loggedin: isloggedin });
+    const { isloggedin } = req.session;
 
-
-
-
+    //deconstructing and getting user info from registration input
     const { firstname, lastname, email, userpass } = req.body;
     const vals = [firstname, lastname, email, userpass];
-    
-    const novals = "Please enter your first name, last name, email and password";
 
+    //variable for error message
+    const nodata = "Please enter your first name, last name, email and password";
 
+    //SQL to be used
+    const checkdetailsSQL = `SELECT * FROM user WHERE email = '${email}'`;
     const insertSQL = 'INSERT into user (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
+    const message = 'test';
 
-    if (!firstname || !lastname || !email || !userpass) return res.render('register', {loggedin: false, error: vals });
 
-   //if (!firstname || !lastname || !email || !userpass) return res.json({ error: "Please enter your first name, last name, email and password" });
+    conn.query(checkdetailsSQL, [email], async (err, result) => {
+        if (err) throw err;
 
-    else {
+        //check if user has missed any input boxes
+        if (!firstname || !lastname || !email || !userpass) {
+            return res.render('register', { loggedin: isloggedin, errmsg: "Please enter your first name, last name, email and password" });
+        } else if (result.length > 0) {
+            return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
+            //res.send('Email has already been registered');
+        } else {
+            conn.query(insertSQL, vals, async (err, rows) => {
+                if (err) throw err;
+                //console.log(vals);
 
-        conn.query(insertSQL, vals, async (err, rows) => {
-            if (err) throw err;
-            //console.log(vals);
-
-            res.redirect('login');
-
-        });
-
-        const session = req.session;
-        console.log(session);
-
-    };
-
-    //if (!email || !password) return res.json({ status: "error", error: "Please enter your email and password" });
-
-    /*
-    else {
-        console.log(email);
-
-        conn.query(insertSQL, vals, async (err, rows) => {
-            if (err) {
-                throw err;
-            } else if (result[0]) {
-                return res.json({ status: "error", error: "Email has already been registered" })
-            }
-            else {
-                res.redirect('/');
-            }
-        });
-    }*/
+                res.redirect('login');
+            });
+        };
+    });
 };
+
+
+
+
+
+
+//if (!firstname || !lastname || !email || !userpass) return res.render('register', {loggedin: false, error: vals });
+
+//if (!firstname || !lastname || !email || !userpass) return res.json({ error: "Please enter your first name, last name, email and password" });
+
+// else {
+
+
+
+
+
+
+//if (!email || !password) return res.json({ status: "error", error: "Please enter your email and password" });
+
+/*
+else {
+    console.log(email);
+
+    conn.query(insertSQL, vals, async (err, rows) => {
+        if (err) {
+            throw err;
+        } else if (result[0]) {
+            return res.json({ status: "error", error: "Email has already been registered" })
+        }
+        else {
+            res.redirect('/');
+        }
+    });
+}*/
+//};
 
 
 
