@@ -55,16 +55,19 @@ exports.getDashboard = (req, res) => {
 
 
 exports.getRegister = (req, res) => {
+    var regError = false;
     const session = req.session;
     console.log(session);
 
     const { isloggedin } = req.session;
     console.log(`User logged in: ${isloggedin}`);
 
-    res.render('register', { loggedin: isloggedin });
+    res.render('register', { loggedin: isloggedin, regError: regError });
 };
 
 exports.postRegister = (req, res) => {
+    var message = "";
+
     const session = req.session;
     const { isloggedin } = req.session;
 
@@ -78,7 +81,6 @@ exports.postRegister = (req, res) => {
     //SQL to be used
     const checkdetailsSQL = `SELECT * FROM user WHERE email = '${email}'`;
     const insertSQL = 'INSERT into user (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
-    const message = 'test';
 
 
     conn.query(checkdetailsSQL, [email], async (err, result) => {
@@ -86,11 +88,13 @@ exports.postRegister = (req, res) => {
 
         //check if user has missed any input boxes
         if (!firstname || !lastname || !email || !userpass) {
-            //return res.render('register', { loggedin: isloggedin, errmsg: "Please enter your first name, last name, email and password" });
-            return res.status(400).send('Please enter your first name, last name, email and password');
+            message = "Please enter your first name, last name, email and password";
+            return res.render('register', { loggedin: isloggedin, regError: true, message: message});
+            //return res.status(400).send('Please enter your first name, last name, email and password');
         } else if (result.length > 0) {
             //return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
-            return res.status(400).send('Email has already been registered');
+            message = 'Email has already been registered';
+            return res.render('register', { loggedin: isloggedin, regError: true, message: message });
         } else {
             conn.query(insertSQL, vals, async (err, rows) => {
                 if (err) throw err;
