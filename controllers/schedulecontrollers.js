@@ -189,14 +189,19 @@ exports.getLogout = (req, res) => {
 
 
 
-exports.getAddNewRun = (req, res) => {
-    res.render('addsnapshot');
-    console.log(req.body);
+exports.getNewSnap = (req, res) => {
+    const session = req.session;
+    console.log(session);
+
+    const { isloggedin } = req.session;
+    console.log(`User logged in: ${isloggedin}`);
+
+    res.render('addsnapshot', { loggedin: isloggedin });
 };
 
 
 
-
+/*
 exports.selectRun = (req, res) => {
     const { id } = req.params;
 
@@ -210,11 +215,11 @@ exports.selectRun = (req, res) => {
         }
     });
 };
+*/
 
 
 
-
-exports.postNewRun = (req, res) => {
+exports.postNewSnap = (req, res) => {
     const { new_context, new_date } = req.body;
     const vals = [new_context, new_date];
 
@@ -229,6 +234,8 @@ exports.postNewRun = (req, res) => {
     });
     console.log(req.body);
 };
+
+
 
 
 exports.updateRun = (req, res) => {
