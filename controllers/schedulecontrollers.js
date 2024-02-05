@@ -86,10 +86,11 @@ exports.postRegister = (req, res) => {
 
         //check if user has missed any input boxes
         if (!firstname || !lastname || !email || !userpass) {
-            return res.render('register', { loggedin: isloggedin, errmsg: "Please enter your first name, last name, email and password" });
+            //return res.render('register', { loggedin: isloggedin, errmsg: "Please enter your first name, last name, email and password" });
+            return res.status(400).send('Please enter your first name, last name, email and password');
         } else if (result.length > 0) {
-            return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
-            //res.send('Email has already been registered');
+            //return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
+            return res.status(400).send('Email has already been registered');
         } else {
             conn.query(insertSQL, vals, async (err, rows) => {
                 if (err) throw err;
