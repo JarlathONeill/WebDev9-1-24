@@ -109,48 +109,15 @@ exports.postRegister = (req, res) => {
 
 
 
-
-
-//if (!firstname || !lastname || !email || !userpass) return res.render('register', {loggedin: false, error: vals });
-
-//if (!firstname || !lastname || !email || !userpass) return res.json({ error: "Please enter your first name, last name, email and password" });
-
-// else {
-
-
-
-
-
-
-//if (!email || !password) return res.json({ status: "error", error: "Please enter your email and password" });
-
-/*
-else {
-    console.log(email);
-
-    conn.query(insertSQL, vals, async (err, rows) => {
-        if (err) {
-            throw err;
-        } else if (result[0]) {
-            return res.json({ status: "error", error: "Email has already been registered" })
-        }
-        else {
-            res.redirect('/');
-        }
-    });
-}*/
-//};
-
-
-
 exports.getLogin = (req, res) => {
+    var logError = false;
     const session = req.session;
     console.log(session);
 
     const { isloggedin } = req.session;
     console.log(`User logged in: ${isloggedin}`);
 
-    res.render('login', { loggedin: isloggedin });
+    res.render('login', { loggedin: isloggedin, logError: logError });
 };
 
 
@@ -162,7 +129,9 @@ exports.postLogin = (req, res) => {
     const vals = [email, userpass];
     console.log(vals);
 
-    const checkuserSQL = `SELECT user_id FROM user WHERE user.email = '${email}'`;
+    const checkuserSQL = `SELECT user_id, email, password 
+    FROM user 
+    WHERE user.email = '${email}' AND user.password = '${userpass}'`;
 
     conn.query(checkuserSQL, vals, (err, rows) => {
         if (err) throw err;
@@ -176,9 +145,11 @@ exports.postLogin = (req, res) => {
             session.isloggedin = true;
             session.userid = rows[0].user_id;
             console.log(session);
-            res.redirect('/');
+            //res.render('login', { logError: true, message: "Successfully logged in" });
+            res.redirect('/dashboard');
         } else {
-            res.redirect('/');
+            //res.redirect('/');
+            res.render('login', { loggedin: false, logError: true, message: "Incorrect email or password" });
         }
     });
 };
