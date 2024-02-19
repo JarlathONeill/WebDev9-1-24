@@ -218,13 +218,13 @@
 
 
 
-                            <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
                                 integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
                                 crossorigin="anonymous">
 
 
 
-                            </script>-->
+                            </script>
 
                             <script>
                                 //var yvals = [ 1, 2, 3, 4, 5, 6, 7 ];
@@ -232,8 +232,11 @@
                                 const xlabels = [ "Enjoyment", "Sadness", "Anger", "Contempt", "Disgust", "Fear", "Surprise" ];
 
                                 const newdata = `<%- JSON.stringify(data) %>`;
+                                
                                 const yvals = JSON.parse(newdata);
-                                console.log(yvals);
+                                console.log(`yvals = ${yvals}`);
+                                const maxAmount = Math.max(newdata);
+                                console.log(`max = ${maxAmount}`);
 
                                 const chartdata = {
                                     labels: xlabels,
@@ -254,7 +257,7 @@
                                         responsive: false,
                                         animation: true,
                                         maintainAspectRatio: true,
-                                        scales: { y: { min: 0, max: 11 } },
+                                        scales: { y: { min: 0, max: maxAmount, ticks: { stepSize: 1} } },
                                         plugins: {
                                             legend: { display: false },
                                             tooltip: { enabled: true },

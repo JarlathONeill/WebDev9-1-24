@@ -69,7 +69,7 @@ exports.getDashboard = (req, res) => {
         });
 
 
-
+        /*
         conn.query(selectSQL, (err, rows) => {
             if (err) {
                 throw err;
@@ -77,6 +77,7 @@ exports.getDashboard = (req, res) => {
                 res.render('dashboard', { records: rows, loggedin: isloggedin, user: userinfo });
             }
         });
+        */
 
         
 
