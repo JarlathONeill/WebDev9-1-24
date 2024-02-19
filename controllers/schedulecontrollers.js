@@ -41,6 +41,35 @@ exports.getDashboard = (req, res) => {
 
 
         const selectSQL = `SELECT * FROM emotiondata WHERE emotiondata.user_id = ${userid}`;
+
+        conn.query(selectSQL, (err, rows) => {
+            if (err) throw err;
+
+            var countenjoyment = 0;
+            var countsadness = 0;
+            var countanger = 0;
+            var countcontempt = 0;
+            var countdisgust = 0;
+            var countfear = 0;
+            var countsurprise = 0;
+
+            rows.forEach((row) => {
+                countenjoyment += row.enjoyment;
+                countsadness += row.sadness;
+                countanger += row.anger;
+                countcontempt += row.contempt;
+                countdisgust += row.disgust;
+                countfear += row.fear;
+                countsurprise += row.surprise;
+            })
+
+            const counts = [countenjoyment, countsadness, countanger, countcontempt, countdisgust, countfear, countsurprise];
+            console.log(counts);
+            res.render('dashboard', { data: counts, records: rows, loggedin: isloggedin, user: userinfo });
+        });
+
+
+
         conn.query(selectSQL, (err, rows) => {
             if (err) {
                 throw err;
@@ -48,10 +77,12 @@ exports.getDashboard = (req, res) => {
                 res.render('dashboard', { records: rows, loggedin: isloggedin, user: userinfo });
             }
         });
-    };
 
+        
 
-}
+    }
+};
+
 
 
 exports.getRegister = (req, res) => {
@@ -89,7 +120,7 @@ exports.postRegister = (req, res) => {
         //check if user has missed any input boxes
         if (!firstname || !lastname || !email || !userpass) {
             message = "Please enter your first name, last name, email and password";
-            return res.render('register', { loggedin: isloggedin, regError: true, message: message});
+            return res.render('register', { loggedin: isloggedin, regError: true, message: message });
             //return res.status(400).send('Please enter your first name, last name, email and password');
         } else if (result.length > 0) {
             //return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
