@@ -61,59 +61,74 @@
     </nav>
 
     <div class="container-lg py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                    <div class="card-body p-5 text-center"><h1>ADD SNAPSHOT</h1>
-                        <div>
-                            <label for="customRange3" class="form-label">Enjoyment</label>
-                            <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3" oninput="this.nextElementSibling.value = this.value">
-                            <output>0</output>
-                        </div>
-                        <div>
-                            <label for="customRange3" class="form-label">Sadness</label>
-                            <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3" oninput="this.nextElementSibling.value = this.value">
-                            <output>6</output>
-                        </div>
-                        <div>
-                            <label for="customRange3" class="form-label">Anger</label>
-                            <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3" oninput="this.nextElementSibling.value = this.value">
-                            <output>6</output>
-                        </div>
-                        <div>
-                            <label for="customRange3" class="form-label">Contempt</label>
-                            <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3" oninput="this.nextElementSibling.value = this.value">
-                            <output>6</output>
-                        </div>
-                        <div>
-                            <label for="customRange3" class="form-label">Disgust</label>
-                            <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3" oninput="this.nextElementSibling.value = this.value">
-                            <output>6</output>
-                        </div>
-                        <div>
-                            <label for="customRange3" class="form-label">Fear</label>
-                            <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3" oninput="this.nextElementSibling.value = this.value">
-                            <output>6</output>
-                        </div>
-                        <div>
-                            <label for="customRange3" class="form-label">Surprise</label>
-                            <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3" oninput="this.nextElementSibling.value = this.value">
-                            <output>6</output>
-                        </div>
+        <form action="/addsnapshot" method="post">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+                            <h1>ADD SNAPSHOT</h1>
+                            <div>
+                                <label for="customRange3" class="form-label">Enjoyment</label>
+                                <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3"
+                                    oninput="this.nextElementSibling.value = this.value" name="enjoyment">
+                                <output>0</output>
+                            </div>
+                            <div>
+                                <label for="customRange3" class="form-label">Sadness</label>
+                                <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3"
+                                    oninput="this.nextElementSibling.value = this.value" name="sadness">
+                                <output>6</output>
+                            </div>
+                            <div>
+                                <label for="customRange3" class="form-label">Anger</label>
+                                <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3"
+                                    oninput="this.nextElementSibling.value = this.value" name="anger">
+                                <output>6</output>
+                            </div>
+                            <div>
+                                <label for="customRange3" class="form-label">Contempt</label>
+                                <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3"
+                                    oninput="this.nextElementSibling.value = this.value" name="contempt">
+                                <output>6</output>
+                            </div>
+                            <div>
+                                <label for="customRange3" class="form-label">Disgust</label>
+                                <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3"
+                                    oninput="this.nextElementSibling.value = this.value" name="disgust">
+                                <output>6</output>
+                            </div>
+                            <div>
+                                <label for="customRange3" class="form-label">Fear</label>
+                                <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3"
+                                    oninput="this.nextElementSibling.value = this.value" name="fear">
+                                <output>6</output>
+                            </div>
+                            <div>
+                                <label for="customRange3" class="form-label">Surprise</label>
+                                <input type="range" class="form-range" min="1" max="10" step="1" id="customRange3"
+                                    oninput="this.nextElementSibling.value = this.value" name="surprise">
+                                <output>6</output>
+                            </div>
 
-                        <div>
-                            <input type="datetime-local">
+                            <div>
+                                <input type="datetime-local" name="datetimerecord">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label">Context:</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="context"></textarea>
+                            </div>
+
+
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+
+
+
+
                         </div>
-
-                        
-
-                        <button type="submit" class="btn btn-primary">Submit</button>
-
-                        
-                        
-
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>

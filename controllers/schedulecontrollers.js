@@ -198,9 +198,12 @@ exports.getLogout = (req, res) => {
 
 exports.getNewSnap = (req, res) => {
     const session = req.session;
+    
     console.log(session);
 
-    const { isloggedin } = req.session;
+    const { isloggedin, userid } = req.session;
+
+    //const { isloggedin } = req.session;
     console.log(`User logged in: ${isloggedin}`);
 
     res.render('addsnapshot', { loggedin: isloggedin });
@@ -227,10 +230,14 @@ exports.selectRun = (req, res) => {
 
 
 exports.postNewSnap = (req, res) => {
-    const { new_context, new_date } = req.body;
-    const vals = [new_context, new_date];
+    const { isloggedin, userid } = req.session;
 
-    const insertSQL = 'INSERT INTO emotiondata (context_trigger, date_time_record) VALUES (?, ?)';
+    const { enjoyment, sadness, anger, contempt, disgust,
+        fear, surprise, context, datetimerecord } = req.body;
+    
+    const vals = [ enjoyment, sadness, anger, contempt, disgust, fear, surprise, context, datetimerecord, userid ];
+
+    const insertSQL = 'INSERT INTO emotiondata (enjoyment, sadness, anger, contempt, disgust, fear, surprise, context_trigger, date_time_record, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
     conn.query(insertSQL, vals, (err, results) => {
         if (err) {
