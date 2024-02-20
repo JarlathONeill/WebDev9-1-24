@@ -243,7 +243,7 @@ exports.postNewSnap = (req, res) => {
         if (err) {
             throw err;
         } else {
-            res.redirect('/');
+            res.redirect('dashboard');
         }
     });
     console.log(req.body);
