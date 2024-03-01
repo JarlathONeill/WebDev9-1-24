@@ -4,9 +4,8 @@ const conn = require('../utils/dbconn');
 const router = express.Router();
 
 router.get('/', controller.getHome);
-//router.get('/new', controller.getAddNewRun);
 router.get('/register', controller.getRegister);
-//router.get('/edit/:id', controller.selectRun);
+router.get('/editsnapshot/:id', controller.selectSnapshot);
 router.get('/login', controller.getLogin);
 router.get('/logout', controller.getLogout);
 router.get('/dashboard', controller.getDashboard);
@@ -14,11 +13,11 @@ router.get('/addsnapshot', controller.getNewSnap);
 
 
 
-//router.post('/new', controller.postNewRun);
-//router.post('/edit/:id', controller.updateRun);
-//router.post('/del/:id', controller.deleteRun);
+
+router.post('/editsnapshot/:id', controller.updateSnapshot);
+router.post('/deletesnapshot/:id', controller.deleteSnapshot);
 router.post('/register', controller.postRegister);
 router.post('/login', controller.postLogin);
 router.post('/addsnapshot', controller.postNewSnap);
 
-module.exports = router;
+module.exports = router;    

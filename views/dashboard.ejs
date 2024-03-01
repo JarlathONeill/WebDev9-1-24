@@ -149,7 +149,6 @@
                         <table class="table table-striped table-sm">
                             <thead>
                                 <tr>
-                                    <th scope="col">ID</th>
                                     <th scope="col">Date/Time</th>
                                     <th scope="col">Enjoyment</th>
                                     <th scope="col">Sadness</th>
@@ -165,17 +164,14 @@
                                 hour: 'numeric' , minute: 'numeric' , hour12: true }; %>
                                 <section>
                                     <% records.forEach((row)=> { %>
-                                        <% var snapshotid=row.id; %>
+                                        <% var snapshotid = row.emotion_data_id; %>
                                             <% var rawdate=new Date(row.date_time_record); %>
                                                 <% var itemdate=new
                                                     Intl.DateTimeFormat('en-GB',dateformat).format(rawdate); %>
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <%= row.emotion_data_id %>
-                                                            </td>
-                                                            <td>
-                                                                <%= itemdate %>
+                                                                <a href="/editsnapshot/<%= snapshotid %>"><%= itemdate %></a>
                                                             </td>
                                                             <td>
                                                                 <%= row.enjoyment %>
@@ -244,7 +240,7 @@
                                         data: yvals,
                                         lineTension: 0,
                                         pointRadius: 3,
-                                        backgroundColor:'lightgray',
+                                        backgroundColor:'blue',
                                         borderCoolor: 'black',
                                         borderWidth: 1
                                     }]
