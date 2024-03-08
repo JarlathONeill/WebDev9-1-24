@@ -20,4 +20,5 @@ router.post('/register', controller.postRegister);
 router.post('/login', controller.postLogin);
 router.post('/addsnapshot', controller.postNewSnap);
 
+
 module.exports = router;    
