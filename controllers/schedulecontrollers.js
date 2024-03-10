@@ -1,8 +1,10 @@
 const conn = require('./../utils/dbconn');
+const axios = require('axios');
+const { get } = require('../utils/fetch')
 
 exports.getHome = (req, res) => {
     const { isloggedin } = req.session;
-    console.log(`User logged in: ${isloggedin}`);
+    //console.log(`User logged in: ${isloggedin}`);
 
     res.render('index', { loggedin: isloggedin });
 };
@@ -10,10 +12,10 @@ exports.getHome = (req, res) => {
 exports.getRegister = (req, res) => {
     var regError = false;
     const session = req.session;
-    console.log(session);
+    //console.log(session);
 
     const { isloggedin } = req.session;
-    console.log(`User logged in: ${isloggedin}`);
+    //console.log(`User logged in: ${isloggedin}`);
 
     res.render('register', { loggedin: isloggedin, regError: regError });
 };
@@ -62,10 +64,10 @@ exports.postRegister = (req, res) => {
 exports.getLogin = (req, res) => {
     var logError = false;
     const session = req.session;
-    console.log(session);
+    //console.log(session);
 
     const { isloggedin } = req.session;
-    console.log(`User logged in: ${isloggedin}`);
+    //console.log(`User logged in: ${isloggedin}`);
 
     res.render('login', { loggedin: isloggedin, logError: logError });
 };
@@ -73,11 +75,11 @@ exports.getLogin = (req, res) => {
 
 exports.postLogin = (req, res) => {
     const session = req.session;
-    console.log(session);
+    //console.log(session);
 
     const { email, userpass } = req.body;
     const vals = [email, userpass];
-    console.log(vals);
+    //console.log(vals);
 
     const checkuserSQL = `SELECT user_id, email, password 
     FROM user 
@@ -87,14 +89,14 @@ exports.postLogin = (req, res) => {
         if (err) throw err;
 
         const numrows = rows.length;
-        console.log(numrows);
+        //console.log(numrows);
 
         if (numrows > 0) {
-            console.log(rows);
+            //console.log(rows);
             const session = req.session;
             session.isloggedin = true;
             session.userid = rows[0].user_id;
-            console.log(session);
+            //console.log(session);
             //res.render('login', { logError: true, message: "Successfully logged in" });
             res.redirect('/dashboard');
         } else {
@@ -104,7 +106,7 @@ exports.postLogin = (req, res) => {
     });
 };
 
-exports.getDashboard = (req, res) => {
+exports.getDashboard = async (req, res) => {
     var userinfo = {};
 
     //const session = req.session;
@@ -115,53 +117,118 @@ exports.getDashboard = (req, res) => {
 
 
     if (isloggedin) {
-        const getuserSQL = `SELECT user.first_name
-        FROM user
-        WHERE user.user_id = '${userid}'`;
 
-        conn.query(getuserSQL, (err, rows) => {
+        const endpoint1 = `http://localhost:3002/users/${userid}`;
 
-            if (err) throw err;
+        axios
+            .get(endpoint1)
+            .then((response) => {
+                const data = response.data.result;
+                console.log(`new endpoint data: ${data}`);
+                const username = data[0].first_name;
 
-            console.log(rows);
-            const username = rows[0].first_name;
-            const session = req.session;
-            session.name = username;
-            userinfo = { name: username };
-            console.log(userinfo);
+                const session = req.session;
+                session.name = username;
+                console.log(session);
+
+                userinfo = {name: username};
+                console.log(userinfo)
+                
+
+                // for (i=0; i < data.length; i++) {
+                //     if (data[i].user_id === userid) {
+
+                //         userData.push(data[i]);
+                        
+                        
+
+                //         // const username = data[i].first_name;
+                //         // console.log(`>>>>>>>>>>>>DATA.USERNAME: ${data[i].first_name}`);
+                //         // const session = req.session;
+                        
+                //         // session.name = username;
+                //         // console.log(session.name);
+                //         // userinfo = { name: username };
+                //     }
+                // }
+
+                
+                //console.log(`>>>>>>>>>>>>USERNAME: ${username}`);
 
 
-        });
 
 
 
-        const selectSQL = `SELECT * FROM emotiondata WHERE emotiondata.user_id = ${userid}`;
+                // if (userid === data.user_id) {
+                //     console.log(`>>>>>>>>>>>>USERNAME: ${data.user_id}`);
+                //     const username = data.first_name;
+                //     const session = req.session;
+                //     session.name = username;
+                //     userinfo = { name: username };
 
-        conn.query(selectSQL, (err, rows) => {
-            if (err) throw err;
+                // }
+                    
 
-            var countenjoyment = 0;
-            var countsadness = 0;
-            var countanger = 0;
-            var countcontempt = 0;
-            var countdisgust = 0;
-            var countfear = 0;
-            var countsurprise = 0;
-
-            rows.forEach((row) => {
-                countenjoyment += row.enjoyment;
-                countsadness += row.sadness;
-                countanger += row.anger;
-                countcontempt += row.contempt;
-                countdisgust += row.disgust;
-                countfear += row.fear;
-                countsurprise += row.surprise;
             })
+            .catch((error) => {
+                console.log(`Error making API request: ${error}`);
+            });
 
-            const counts = [countenjoyment, countsadness, countanger, countcontempt, countdisgust, countfear, countsurprise];
-            console.log(counts);
-            res.render('dashboard', { data: counts, records: rows, loggedin: isloggedin, user: userinfo });
-        });
+
+        // const getuserSQL = `SELECT user.first_name FROM user WHERE user.first_name = ${userid}`;
+        // conn.query(getuserSQL, (err, rows) => {
+
+        //     if (err) throw err;
+
+        //     //console.log(rows);
+        //     const username = rows[0].first_name;
+        //     const session = req.session;
+        //     session.name = username;
+        //     userinfo = { name: username };
+        //     //console.log(userinfo);
+
+
+        // });
+
+        const endpoint2 = `http://localhost:3002/snapshot/getdashboard`;
+
+        axios
+            .get(endpoint2)
+            .then((response) => {
+                const data = response.data.result;
+                const newData = [];
+
+                for (i=0; i < data.length; i++) {
+                    if (data[i].user_id === userid) {
+                        newData.push(data[i]);
+                    }
+                }
+
+                
+
+
+
+                var countenjoyment = countsadness = countanger = countcontempt = countdisgust = countfear = countsurprise = 0;
+                //const headers = response.headers;
+                
+                newData.forEach((row) => {
+                    countenjoyment += row.enjoyment;
+                    countsadness += row.sadness;
+                    countanger += row.anger;
+                    countcontempt += row.contempt;
+                    countdisgust += row.disgust;
+                    countfear += row.fear;
+                    countsurprise += row.surprise;
+                })
+
+                const counts = [countenjoyment, countsadness, countanger, countcontempt, countdisgust, countfear, countsurprise];
+
+                res.render('dashboard', { data: counts, records: newData,  loggedin: isloggedin, user: userinfo });
+            })
+            .catch((error) => {
+                console.log(`Error making API request: ${error}`);
+            });
+
     }
 };
 
@@ -169,20 +236,9 @@ exports.getDashboard = (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 exports.getNewSnap = (req, res) => {
     const session = req.session;
-    
+
     console.log(session);
 
     const { isloggedin, userid } = req.session;
@@ -206,8 +262,8 @@ exports.postNewSnap = (req, res) => {
 
     const { enjoyment, sadness, anger, contempt, disgust,
         fear, surprise, context, datetimerecord } = req.body;
-    
-    const vals = [ enjoyment, sadness, anger, contempt, disgust, fear, surprise, context, datetimerecord, userid ];
+
+    const vals = [enjoyment, sadness, anger, contempt, disgust, fear, surprise, context, datetimerecord, userid];
 
     const insertSQL = 'INSERT INTO emotiondata (enjoyment, sadness, anger, contempt, disgust, fear, surprise, context_trigger, date_time_record, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
@@ -223,24 +279,51 @@ exports.postNewSnap = (req, res) => {
 
 exports.selectSnapshot = (req, res) => {
     const session = req.session;
-    
-    console.log(session);
+
+    //console.log(session);
 
     const { isloggedin, userid } = req.session;
 
     const { id } = req.params;
 
-    console.log(isloggedin);
+    //console.log(isloggedin);
 
-    const selectSQL = `SELECT * FROM emotiondata WHERE emotion_data_id = ${id}`;
-    conn.query(selectSQL, (err, rows) => {
-        if (err) {
-            throw err;
-        } else {
-            console.log(rows);
-            res.render('editsnapshot', {loggedin: isloggedin, details: rows});
-        }
-    });
+    // const selectSQL = `SELECT * FROM emotiondata WHERE emotion_data_id = ${id}`;
+    // conn.query(selectSQL, (err, rows) => {
+    //     if (err) {
+    //         throw err;
+    //     } else {
+    //         console.log(rows);
+    //         res.render('editsnapshot', { loggedin: isloggedin, details: rows });
+    //     }
+    // });
+
+    const endpoint = `http://localhost:3002/snapshot/selectsnapshot/${id}`;
+
+    const config = { validateStatus: (status) => { return status < 500 } };
+
+    axios
+        .get(endpoint, config)
+        .then((response) => {
+            const data = response.data.result;
+            console.log('Promise resolved!');
+            console.log(response.data);
+            res.render('editsnapshot', { loggedin: isloggedin, details: data });
+        })
+        .catch((error) => {
+            console.log('Promise rejected!');
+            console.log(error.response);
+        });
+
+
+
+
+
+
+
+
+
+
 };
 
 
@@ -254,7 +337,7 @@ exports.updateSnapshot = (req, res) => {
     const { id } = req.params;
 
     //const emotion_data_id = req.params.snapshotid;  
-    const { context} = req.body;
+    const { context } = req.body;
     const vals = [context];
     console.log(vals);
 
@@ -266,6 +349,30 @@ exports.updateSnapshot = (req, res) => {
             res.redirect('/dashboard');
         }
     });
+
+    const endpoint = `http://localhost:3002/:${id}`;
+
+    axios
+        .put(endpoint, { validateStatus: (status) => { return status < 500 } })
+        .then((response) => {
+            const status = response.status;
+            if (status === 200) {
+                res.redirect('');
+            } else {
+                console.log(response.status);
+                console.log(response.data);
+                res.redirect('');
+            }
+        })
+        .catch((error) => {
+            console.log(`Error making API request: ${error}`);
+        });
+
+
+
+
+
+
 };
 
 
