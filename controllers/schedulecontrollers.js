@@ -133,6 +133,11 @@ exports.getDashboard = async (req, res) => {
 
                 userinfo = {name: username};
                 console.log(userinfo)
+
+            })
+            .catch((error) => {
+                console.log(`Error making API request: ${error}`);
+            });
                 
 
                 // for (i=0; i < data.length; i++) {
@@ -169,10 +174,7 @@ exports.getDashboard = async (req, res) => {
                 // }
                     
 
-            })
-            .catch((error) => {
-                console.log(`Error making API request: ${error}`);
-            });
+
 
 
         // const getuserSQL = `SELECT user.first_name FROM user WHERE user.first_name = ${userid}`;
@@ -329,7 +331,7 @@ exports.selectSnapshot = (req, res) => {
 
 
 
-exports.updateSnapshot = (req, res) => {
+exports.updateSnapshot = async (req, res) => {
 
     const session = req.session;
     const { isloggedin, userid } = req.session;
@@ -350,7 +352,7 @@ exports.updateSnapshot = (req, res) => {
         }
     });
 
-    const endpoint = `http://localhost:3002/:${id}`;
+    const endpoint = `http://localhost:3002/snapshot/updatesnapshot/:${id}`;
 
     axios
         .put(endpoint, { validateStatus: (status) => { return status < 500 } })
