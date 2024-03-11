@@ -1,6 +1,6 @@
 const conn = require('./../utils/dbconn');
 const axios = require('axios');
-const { get } = require('../utils/fetch')
+//const { get } = require('../utils/fetch')
 
 exports.getHome = (req, res) => {
     const { isloggedin } = req.session;
@@ -308,8 +308,8 @@ exports.selectSnapshot = (req, res) => {
         .get(endpoint, config)
         .then((response) => {
             const data = response.data.result;
-            console.log('Promise resolved!');
-            console.log(response.data);
+            //console.log('Promise resolved!');
+            //console.log(response.data);
             res.render('editsnapshot', { loggedin: isloggedin, details: data });
         })
         .catch((error) => {
@@ -339,58 +339,67 @@ exports.updateSnapshot = async (req, res) => {
     const { id } = req.params;
 
     //const emotion_data_id = req.params.snapshotid;  
-    const { context } = req.body;
-    const vals = [context];
-    console.log(vals);
+     const { context } = req.body;
+     const vals = {context, id};
+     console.log('VALS ARE ' + vals);
 
-    const updateSQL = `UPDATE emotiondata SET context_trigger = ? WHERE emotion_data_id = ${id}`;
-    conn.query(updateSQL, vals, (err, rows) => {
-        if (err) {
-            throw err;
-        } else {
-            res.redirect('/dashboard');
-        }
-    });
+    // const updateSQL = `UPDATE emotiondata SET context_trigger = ? WHERE emotion_data_id = ${id}`;
+    // conn.query(updateSQL, vals, (err, rows) => {
+    //     if (err) {
+    //         throw err;
+    //     } else {
+    //         res.redirect('/dashboard');
+    //     }
+    // });
 
-    const endpoint = `http://localhost:3002/snapshot/updatesnapshot/:${id}`;
+    const endpoint = `http://localhost:3002/snapshot/updatesnapshot/${id}`;
 
-    axios
-        .put(endpoint, { validateStatus: (status) => { return status < 500 } })
+    await axios
+        .put(endpoint, vals )
         .then((response) => {
-            const status = response.status;
-            if (status === 200) {
-                res.redirect('');
-            } else {
-                console.log(response.status);
-                console.log(response.data);
-                res.redirect('');
-            }
+            console.log(response.data);
+            // const status = response.status;
+            // if (status === 200) {
+            //     res.redirect('/dashboard');
+            // } else {
+            //     console.log(response.status);
+            //     console.log(response.data);
+                res.redirect('/dashboard');
+            // }
         })
         .catch((error) => {
             console.log(`Error making API request: ${error}`);
         });
 
-
-
-
-
-
 };
 
 
-exports.deleteSnapshot = (req, res) => {
+exports.deleteSnapshot = async (req, res) => {
     //const run_id = req.params.id;
 
     const { id } = req.params;
+    console.log('>>>>>>ID IS ' + id);
 
-    const deleteSQL = `DELETE  FROM emotiondata WHERE emotion_data_id = ${id}`;
-    conn.query(deleteSQL, (err, rows) => {
-        if (err) {
-            throw err;
-        } else {
+    const endpoint = `http://localhost:3002/snapshot/deletesnapshot/${id}`;
+
+    await axios
+        .delete(endpoint)
+        .then((response) => {
+            console.log(response.data);
             res.redirect('/dashboard');
-        }
-    });
+        })
+        .catch((error) => {
+            console.log(`Error making API request: ${error}`)
+        });
+
+    // const deleteSQL = `DELETE  FROM emotiondata WHERE emotion_data_id = ${id}`;
+    // conn.query(deleteSQL, (err, rows) => {
+    //     if (err) {
+    //         throw err;
+    //     } else {
+    //         res.redirect('/dashboard');
+    //     }
+    // });
 };
 
 exports.getLogout = (req, res) => {
