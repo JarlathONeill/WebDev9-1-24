@@ -4,7 +4,6 @@ const axios = require('axios');
 
 exports.getHome = (req, res) => {
     const { isloggedin } = req.session;
-    //console.log(`User logged in: ${isloggedin}`);
 
     res.render('index', { loggedin: isloggedin });
 };
@@ -12,23 +11,21 @@ exports.getHome = (req, res) => {
 exports.getRegister = (req, res) => {
     var regError = false;
     const session = req.session;
-    //console.log(session);
 
     const { isloggedin } = req.session;
-    //console.log(`User logged in: ${isloggedin}`);
 
     res.render('register', { loggedin: isloggedin, regError: regError });
 };
 
-exports.postRegister = (req, res) => {
+exports.postRegister = async (req, res) => {
     var message = "";
 
     const session = req.session;
     const { isloggedin } = req.session;
 
     //deconstructing and getting user info from registration input
-    const { firstname, lastname, email, userpass } = req.body;
-    const vals = [firstname, lastname, email, userpass];
+    const vals = { firstname, lastname, email, userpass } = req.body;
+    //const vals = [firstname, lastname, email, userpass];
 
     //variable for error message
     const nodata = "Please enter your first name, last name, email and password";
@@ -38,72 +35,83 @@ exports.postRegister = (req, res) => {
     const insertSQL = 'INSERT into user (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
 
 
-    conn.query(checkdetailsSQL, [email], async (err, result) => {
-        if (err) throw err;
+    // conn.query(checkdetailsSQL, [email], async (err, result) => {
+    //     if (err) throw err;
 
-        //check if user has missed any input boxes
-        if (!firstname || !lastname || !email || !userpass) {
-            message = "Please enter your first name, last name, email and password";
-            return res.render('register', { loggedin: isloggedin, regError: true, message: message });
-            //return res.status(400).send('Please enter your first name, last name, email and password');
-        } else if (result.length > 0) {
-            //return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
-            message = 'Email has already been registered';
-            return res.render('register', { loggedin: isloggedin, regError: true, message: message });
-        } else {
-            conn.query(insertSQL, vals, async (err, rows) => {
-                if (err) throw err;
-                //console.log(vals);
+    //     //check if user has missed any input boxes
+    //     if (!firstname || !lastname || !email || !userpass) {
+    //         message = "Please enter your first name, last name, email and password";
+    //         return res.render('register', { loggedin: isloggedin, regError: true, message: message });
+    //         //return res.status(400).send('Please enter your first name, last name, email and password');
+    //     } else if (result.length > 0) {
+    //         //return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
+    //         message = 'Email has already been registered';
+    //         return res.render('register', { loggedin: isloggedin, regError: true, message: message });
+    //     } else {
+    //         conn.query(insertSQL, vals, async (err, rows) => {
+    //             if (err) throw err;
+    //             //console.log(vals);
 
-                res.redirect('login');
-            });
-        };
-    });
+    //             res.redirect('login');
+    //         });
+    //     };
+    // });
+
+    const endpoint = `http://localhost:3002/users/register`;
+
+    await axios
+        .post(endpoint, vals)
+        .then((response) => {
+            const data = response.data;
+
+            if (data.message === 'Details already in use') {
+                message = 'Email has already been registered';
+                return res.render('register', { loggedin: isloggedin, regError: true, message: message });
+
+            }
+            res.redirect('/dashboard');
+
+        })
+        .catch((error) => {
+            console.log(`Error making API request: ${error}`);
+        });
 };
 
 exports.getLogin = (req, res) => {
     var logError = false;
     const session = req.session;
-    //console.log(session);
 
     const { isloggedin } = req.session;
-    //console.log(`User logged in: ${isloggedin}`);
 
     res.render('login', { loggedin: isloggedin, logError: logError });
 };
 
 
-exports.postLogin = (req, res) => {
-    const session = req.session;
-    //console.log(session);
+exports.postLogin = async (req, res) => {
 
-    const { email, userpass } = req.body;
-    const vals = [email, userpass];
-    //console.log(vals);
+    const vals = { email, userpass } = req.body;
 
-    const checkuserSQL = `SELECT user_id, email, password 
-    FROM user 
-    WHERE user.email = '${email}' AND user.password = '${userpass}'`;
+    const endpoint = `http://localhost:3002/users/login`;
 
-    conn.query(checkuserSQL, vals, (err, rows) => {
-        if (err) throw err;
+    await axios
+        .post(endpoint, vals, { validateStatus: (status) => {return status < 500 } })
+        .then((response) => {
+            const status = response.status;
+            if (status === 200) {
+                const data = response.data.result;
+                console.log(data);
 
-        const numrows = rows.length;
-        //console.log(numrows);
+                const session = req.session;
+                session.isloggedin = true;
+                session.userid = data[0].user_id;
+                console.log(session);
 
-        if (numrows > 0) {
-            //console.log(rows);
-            const session = req.session;
-            session.isloggedin = true;
-            session.userid = rows[0].user_id;
-            //console.log(session);
-            //res.render('login', { logError: true, message: "Successfully logged in" });
-            res.redirect('/dashboard');
-        } else {
-            //res.redirect('/');
-            res.render('login', { loggedin: false, logError: true, message: "Incorrect email or password" });
-        }
-    });
+                res.redirect('/dashboard');
+            } else {
+                res.render('login', { loggedin: false, logError: true, message: "Incorrect email or password" });
+
+            }
+        })
 };
 
 exports.getDashboard = async (req, res) => {
@@ -131,48 +139,48 @@ exports.getDashboard = async (req, res) => {
                 session.name = username;
                 console.log(session);
 
-                userinfo = {name: username};
+                userinfo = { name: username };
                 console.log(userinfo)
 
             })
             .catch((error) => {
                 console.log(`Error making API request: ${error}`);
             });
-                
 
-                // for (i=0; i < data.length; i++) {
-                //     if (data[i].user_id === userid) {
 
-                //         userData.push(data[i]);
-                        
-                        
+        // for (i=0; i < data.length; i++) {
+        //     if (data[i].user_id === userid) {
 
-                //         // const username = data[i].first_name;
-                //         // console.log(`>>>>>>>>>>>>DATA.USERNAME: ${data[i].first_name}`);
-                //         // const session = req.session;
-                        
-                //         // session.name = username;
-                //         // console.log(session.name);
-                //         // userinfo = { name: username };
-                //     }
-                // }
-
-                
-                //console.log(`>>>>>>>>>>>>USERNAME: ${username}`);
+        //         userData.push(data[i]);
 
 
 
+        //         // const username = data[i].first_name;
+        //         // console.log(`>>>>>>>>>>>>DATA.USERNAME: ${data[i].first_name}`);
+        //         // const session = req.session;
+
+        //         // session.name = username;
+        //         // console.log(session.name);
+        //         // userinfo = { name: username };
+        //     }
+        // }
 
 
-                // if (userid === data.user_id) {
-                //     console.log(`>>>>>>>>>>>>USERNAME: ${data.user_id}`);
-                //     const username = data.first_name;
-                //     const session = req.session;
-                //     session.name = username;
-                //     userinfo = { name: username };
+        //console.log(`>>>>>>>>>>>>USERNAME: ${username}`);
 
-                // }
-                    
+
+
+
+
+        // if (userid === data.user_id) {
+        //     console.log(`>>>>>>>>>>>>USERNAME: ${data.user_id}`);
+        //     const username = data.first_name;
+        //     const session = req.session;
+        //     session.name = username;
+        //     userinfo = { name: username };
+
+        // }
+
 
 
 
@@ -200,19 +208,19 @@ exports.getDashboard = async (req, res) => {
                 const data = response.data.result;
                 const newData = [];
 
-                for (i=0; i < data.length; i++) {
+                for (i = 0; i < data.length; i++) {
                     if (data[i].user_id === userid) {
                         newData.push(data[i]);
                     }
                 }
 
-                
+
 
 
 
                 var countenjoyment = countsadness = countanger = countcontempt = countdisgust = countfear = countsurprise = 0;
                 //const headers = response.headers;
-                
+
                 newData.forEach((row) => {
                     countenjoyment += row.enjoyment;
                     countsadness += row.sadness;
@@ -225,7 +233,7 @@ exports.getDashboard = async (req, res) => {
 
                 const counts = [countenjoyment, countsadness, countanger, countcontempt, countdisgust, countfear, countsurprise];
 
-                res.render('dashboard', { data: counts, records: newData,  loggedin: isloggedin, user: userinfo });
+                res.render('dashboard', { data: counts, records: newData, loggedin: isloggedin, user: userinfo });
             })
             .catch((error) => {
                 console.log(`Error making API request: ${error}`);
@@ -259,25 +267,53 @@ exports.getNewSnap = (req, res) => {
 
 
 
-exports.postNewSnap = (req, res) => {
-    const { isloggedin, userid } = req.session;
+exports.postNewSnap = async (req, res) => {
+    const login = { isloggedin, userid } = req.session;
 
-    const { enjoyment, sadness, anger, contempt, disgust,
-        fear, surprise, context, datetimerecord } = req.body;
+    const vals = {
+        enjoyment, sadness, anger, contempt, disgust, fear,
+        surprise, context, datetimerecord
+    } = req.body;
 
-    const vals = [enjoyment, sadness, anger, contempt, disgust, fear, surprise, context, datetimerecord, userid];
+    const endpoint = `http://localhost:3002/snapshot/addsnapshot`;
 
-    const insertSQL = 'INSERT INTO emotiondata (enjoyment, sadness, anger, contempt, disgust, fear, surprise, context_trigger, date_time_record, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-
-    conn.query(insertSQL, vals, (err, results) => {
-        if (err) {
-            throw err;
-        } else {
-            res.redirect('dashboard');
-        }
-    });
-    console.log(req.body);
+    //ChatGPT helped with adding in the values to pass from Axios to http://localhost:3002/snapshot/addsnapshot
+    await axios
+        .post(endpoint, { enjoyment, sadness, anger, contempt, disgust, fear, surprise, context, datetimerecord, userid })
+        .then((response) => {
+            const data = response.data;
+            console.log(data);
+            res.redirect('/dashboard');
+        })
+        .catch((error) => {
+            console.log(`Error making API request: ${error}`);
+        })
 };
+// console.log(JSON.stringify(req.body));
+
+
+// console.log(JSON.stringify(vals));
+
+    // const { enjoyment, sadness, anger, contempt, disgust,
+    //     fear, surprise, context, datetimerecord } = req.body;
+
+    //const vals = [enjoyment, sadness, anger, contempt, disgust, fear, surprise, context, datetimerecord, userid];
+
+    // const insertSQL = 'INSERT INTO emotiondata (enjoyment, sadness, anger, contempt, disgust, fear, surprise, context_trigger, date_time_record, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    // conn.query(insertSQL, vals, (err, results) => {
+    //     if (err) {
+    //         throw err;
+    //     } else {
+    //         res.redirect('dashboard');
+    //     }
+    // });
+    // console.log(req.body);
+
+        //vals.userid = userid;
+
+    // const vals = [enjoyment, sadness, anger, contempt, disgust, fear, 
+    //     surprise, context, datetimerecord, userid];
 
 exports.selectSnapshot = (req, res) => {
     const session = req.session;
@@ -339,9 +375,9 @@ exports.updateSnapshot = async (req, res) => {
     const { id } = req.params;
 
     //const emotion_data_id = req.params.snapshotid;  
-     const { context } = req.body;
-     const vals = {context, id};
-     console.log('VALS ARE ' + vals);
+    const { context } = req.body;
+    const vals = { context, id };
+    console.log('VALS ARE ' + vals);
 
     // const updateSQL = `UPDATE emotiondata SET context_trigger = ? WHERE emotion_data_id = ${id}`;
     // conn.query(updateSQL, vals, (err, rows) => {
@@ -355,7 +391,7 @@ exports.updateSnapshot = async (req, res) => {
     const endpoint = `http://localhost:3002/snapshot/updatesnapshot/${id}`;
 
     await axios
-        .put(endpoint, vals )
+        .put(endpoint, vals)
         .then((response) => {
             console.log(response.data);
             // const status = response.status;
@@ -364,7 +400,7 @@ exports.updateSnapshot = async (req, res) => {
             // } else {
             //     console.log(response.status);
             //     console.log(response.data);
-                res.redirect('/dashboard');
+            res.redirect('/dashboard');
             // }
         })
         .catch((error) => {
