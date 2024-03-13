@@ -47,91 +47,19 @@
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <!--<li><a class="dropdown-item" href="#">Something else here</a></li>-->
                                     </ul>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/logout">Logout</a>
                                 </li>
                                 <% } %>
-                                    <!--<li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-              </li>-->
                 </ul>
                 </form>
             </div>
         </div>
     </nav>
-    <!---
-    <div class="container-lg py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                    <div class="card-body p-5 text-center">
-
-
-
-                                    <% if (loggedin) { %>
-                                        <div class="mb-md-5 mt-md-4 pb-5">
-                                            <div class="card-body">
-
-                                                <% records.forEach((row)=> { %>
-                                                    <% var snapshotid=row.id; %>
-                                                        <div>
-                                                            <div class="card">
-                                                                <div class="card-body">
-                                                                    <h5 class="card-title">
-                                                                        <%= row.date_time_record %>
-                                                                    </h5>
-
-                                                                    <p class="card-text">Enjoyment <%= row.enjoyment %>
-                                                                    </p>
-                                                                    <p class="card-text">Sadness <%= row.sadness %>
-                                                                    </p>
-                                                                    <p class="card-text">Anger <%= row.anger %>
-                                                                    </p>
-                                                                    <p class="card-text">Contempt <%= row.contempt %>
-                                                                    </p>
-                                                                    <p class="card-text">Disgust <%= row.disgust %>
-                                                                    </p>
-                                                                    <p class="card-text">Fear <%= row.fear %>
-                                                                    </p>
-                                                                    <p class="card-text">Surprise <%= row.surprise %>
-                                                                    </p>
-                                                                    <p class="card-text">
-                                                                        <%= row.context_trigger %>
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <% }); %>
-                                                            <% } else { %>
-
-                                                                <div class="mb-md-5 mt-md-4 pb-5">
-                                                                    <div class="card-body">
-                                                                        <h5 class="card-title">Please create some
-                                                                            snapshots</h5>
-                                                                    </div>
-                                                                </div>
-                                                                <% } %>
-
-                                            </div>
-
-                                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
--->
-
-
-
 
     <% if (loggedin) { %>
-
-
-
         <h2>
             <%= `${user.name}'s Dashboard `%>
         </h2>
@@ -141,134 +69,141 @@
             <% } %>
 
                 <% if (loggedin) { %>
-                <div class="col-md-6 p-lg-5 mx-auto my-5">
-                    <canvas id="bkgcanvas" width="500px" height="500px"></canvas>
-                </div>
-
-                    <div class="table-responsive small">
-                        <table class="table table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Date/Time</th>
-                                    <th scope="col">Enjoyment</th>
-                                    <th scope="col">Sadness</th>
-                                    <th scope="col">Anger</th>
-                                    <th scope="col">Contempt</th>
-                                    <th scope="col">Disgust</th>
-                                    <th scope="col">Fear</th>
-                                    <th scope="col">Surprise</th>
-                                    <th scope="col">Context</th>
-                                </tr>
-                            </thead>
-                            <% const dateformat={ weekday: 'long' , year: 'numeric' , month: 'long' , day: 'numeric' ,
-                                hour: 'numeric' , minute: 'numeric' , hour12: true }; %>
-                                <section>
-                                    <% records.forEach((row)=> { %>
-                                        <% var snapshotid = row.emotion_data_id; %>
-                                            <% var rawdate=new Date(row.date_time_record); %>
-                                                <% var itemdate=new
-                                                    Intl.DateTimeFormat('en-GB',dateformat).format(rawdate); %>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <a href="/editsnapshot/<%= snapshotid %>"><%= itemdate %></a>
-                                                            </td>
-                                                            <td>
-                                                                <%= row.enjoyment %>
-                                                            </td>
-                                                            <td>
-                                                                <%= row.sadness %>
-                                                            </td>
-                                                            <td>
-                                                                <%= row.anger %>
-                                                            </td>
-                                                            <td>
-                                                                <%= row.contempt %>
-                                                            </td>
-                                                            <td>
-                                                                <%= row.disgust %>
-                                                            </td>
-                                                            <td>
-                                                                <%= row.fear %>
-                                                            </td>
-                                                            <td>
-                                                                <%= row.surprise %>
-                                                            </td>
-                                                            <td>
-                                                                <%= row.context_trigger %>
-                                                            </td>
-                                                            <% }); %>
-                                                        </tr>
-                                                    </tbody>
-                                </section>
-                        </table>
-                    </div>
-
-                    <% } else { %>
-                        <div class="mb-md-5 mt-md-4 pb-5">
-                            <div class="card-body">
-                                <h5 class="card-title">Please create some snapshots</h5>
-                            </div>
+                    <% if (records.length> 0) { %>
+                        <div class="col-md-6 p-lg-5 mx-auto my-5">
+                            <canvas id="bkgcanvas" width="500px" height="500px"></canvas>
                         </div>
-                        <% } %>
 
+                        <div class="table-responsive small">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date/Time</th>
+                                        <th scope="col">Enjoyment</th>
+                                        <th scope="col">Sadness</th>
+                                        <th scope="col">Anger</th>
+                                        <th scope="col">Contempt</th>
+                                        <th scope="col">Disgust</th>
+                                        <th scope="col">Fear</th>
+                                        <th scope="col">Surprise</th>
+                                        <th scope="col">Context</th>
+                                    </tr>
+                                </thead>
+                                <% const dateformat={ weekday: 'long' , year: 'numeric' , month: 'long' , day: 'numeric'
+                                    , hour: 'numeric' , minute: 'numeric' , hour12: true }; %>
+                                    <section>
+                                        <% records.forEach((row)=> { %>
+                                            <% var snapshotid=row.emotion_data_id; %>
+                                                <% var rawdate=new Date(row.date_time_record); %>
+                                                    <% var itemdate=new
+                                                        Intl.DateTimeFormat('en-GB',dateformat).format(rawdate); %>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <a href="/editsnapshot/<%= snapshotid %>">
+                                                                        <%= itemdate %>
+                                                                    </a>
+                                                                </td>
+                                                                <td>
+                                                                    <%= row.enjoyment %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= row.sadness %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= row.anger %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= row.contempt %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= row.disgust %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= row.fear %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= row.surprise %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= row.context_trigger %>
+                                                                </td>
+                                                                <% }); %>
+                                                            </tr>
+                                                        </tbody>
+                                    </section>
+                            </table>
+                        </div>
 
+                        <% } else { %>
+                            <div class="container-lg py-5 h-100">
+                                <div class="row d-flex justify-content-center align-items-center h-100">
+                                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                                        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                                            <div class="card-body p-5 text-center">
+                                                <h1>Please create some snapshots <a class="icon-link"
+                                                        href="/addsnapshot">here</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                                <% } %>
 
-                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-                                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-                                crossorigin="anonymous">
+                                    <script
+                                        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                                        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                                        crossorigin="anonymous">
 
+                                        </script>
 
+                                    <script>
 
-                            </script>
+                                        const xlabels = ["Enjoyment", "Sadness", "Anger", "Contempt", "Disgust", "Fear", "Surprise"];
 
-                            <script>
-                                //var yvals = [ 1, 2, 3, 4, 5, 6, 7 ];
+                                        const newdata = `<%- JSON.stringify(data) %>`;
 
-                                const xlabels = [ "Enjoyment", "Sadness", "Anger", "Contempt", "Disgust", "Fear", "Surprise" ];
+                                        const yvals = JSON.parse(newdata);
+                                        console.log(`yvals = ${yvals}`);
+                                        const maxAmount = Math.max(newdata);
+                                        console.log(`max = ${maxAmount}`);
 
-                                const newdata = `<%- JSON.stringify(data) %>`;
-                                
-                                const yvals = JSON.parse(newdata);
-                                console.log(`yvals = ${yvals}`);
-                                const maxAmount = Math.max(newdata);
-                                console.log(`max = ${maxAmount}`);
+                                        const chartdata = {
+                                            labels: xlabels,
+                                            datasets: [{
+                                                data: yvals,
+                                                lineTension: 0,
+                                                pointRadius: 3,
+                                                backgroundColor: 'blue',
+                                                borderCoolor: 'black',
+                                                borderWidth: 1
+                                            }]
+                                        };
 
-                                const chartdata = {
-                                    labels: xlabels,
-                                    datasets: [{
-                                        data: yvals,
-                                        lineTension: 0,
-                                        pointRadius: 3,
-                                        backgroundColor:'blue',
-                                        borderCoolor: 'black',
-                                        borderWidth: 1
-                                    }]
-                                };
-
-                                const chartconfig = {
-                                    type: 'bar',
-                                    data: chartdata,
-                                    options: {
-                                        responsive: false,
-                                        animation: true,
-                                        maintainAspectRatio: true,
-                                        scales: { y: { min: 0, max: maxAmount, ticks: { stepSize: 1} } },
-                                        plugins: {
-                                            legend: { display: false },
-                                            tooltip: { enabled: true },
-                                            title: {
-                                                display: true,
-                                                text: 'Emotion Summary',
-                                                font: { size: 20 }
+                                        const chartconfig = {
+                                            type: 'bar',
+                                            data: chartdata,
+                                            options: {
+                                                responsive: false,
+                                                animation: true,
+                                                maintainAspectRatio: true,
+                                                scales: { y: { min: 0, max: maxAmount, ticks: { stepSize: 1 } } },
+                                                plugins: {
+                                                    legend: { display: false },
+                                                    tooltip: { enabled: true },
+                                                    title: {
+                                                        display: true,
+                                                        text: 'Emotion Summary',
+                                                        font: { size: 20 }
+                                                    }
+                                                }
                                             }
-                                        }
-                                    }
-                                };
+                                        };
 
-                                const chart = new Chart('bkgcanvas', chartconfig);
+                                        const chart = new Chart('bkgcanvas', chartconfig);
 
-                            </script>
+                                    </script>
 </body>
 
 </html>

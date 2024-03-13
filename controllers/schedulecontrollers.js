@@ -148,58 +148,6 @@ exports.getDashboard = async (req, res) => {
             });
 
 
-        // for (i=0; i < data.length; i++) {
-        //     if (data[i].user_id === userid) {
-
-        //         userData.push(data[i]);
-
-
-
-        //         // const username = data[i].first_name;
-        //         // console.log(`>>>>>>>>>>>>DATA.USERNAME: ${data[i].first_name}`);
-        //         // const session = req.session;
-
-        //         // session.name = username;
-        //         // console.log(session.name);
-        //         // userinfo = { name: username };
-        //     }
-        // }
-
-
-        //console.log(`>>>>>>>>>>>>USERNAME: ${username}`);
-
-
-
-
-
-        // if (userid === data.user_id) {
-        //     console.log(`>>>>>>>>>>>>USERNAME: ${data.user_id}`);
-        //     const username = data.first_name;
-        //     const session = req.session;
-        //     session.name = username;
-        //     userinfo = { name: username };
-
-        // }
-
-
-
-
-
-        // const getuserSQL = `SELECT user.first_name FROM user WHERE user.first_name = ${userid}`;
-        // conn.query(getuserSQL, (err, rows) => {
-
-        //     if (err) throw err;
-
-        //     //console.log(rows);
-        //     const username = rows[0].first_name;
-        //     const session = req.session;
-        //     session.name = username;
-        //     userinfo = { name: username };
-        //     //console.log(userinfo);
-
-
-        // });
-
         const endpoint2 = `http://localhost:3002/snapshot/getdashboard`;
 
         axios
@@ -214,12 +162,7 @@ exports.getDashboard = async (req, res) => {
                     }
                 }
 
-
-
-
-
                 var countenjoyment = countsadness = countanger = countcontempt = countdisgust = countfear = countsurprise = 0;
-                //const headers = response.headers;
 
                 newData.forEach((row) => {
                     countenjoyment += row.enjoyment;
@@ -244,8 +187,6 @@ exports.getDashboard = async (req, res) => {
 
 
 
-
-
 exports.getNewSnap = (req, res) => {
     const session = req.session;
 
@@ -253,17 +194,10 @@ exports.getNewSnap = (req, res) => {
 
     const { isloggedin, userid } = req.session;
 
-    //const { isloggedin } = req.session;
     console.log(`User logged in: ${isloggedin}`);
 
     res.render('addsnapshot', { loggedin: isloggedin });
 };
-
-
-
-
-
-
 
 
 
@@ -289,52 +223,14 @@ exports.postNewSnap = async (req, res) => {
             console.log(`Error making API request: ${error}`);
         })
 };
-// console.log(JSON.stringify(req.body));
 
-
-// console.log(JSON.stringify(vals));
-
-    // const { enjoyment, sadness, anger, contempt, disgust,
-    //     fear, surprise, context, datetimerecord } = req.body;
-
-    //const vals = [enjoyment, sadness, anger, contempt, disgust, fear, surprise, context, datetimerecord, userid];
-
-    // const insertSQL = 'INSERT INTO emotiondata (enjoyment, sadness, anger, contempt, disgust, fear, surprise, context_trigger, date_time_record, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-
-    // conn.query(insertSQL, vals, (err, results) => {
-    //     if (err) {
-    //         throw err;
-    //     } else {
-    //         res.redirect('dashboard');
-    //     }
-    // });
-    // console.log(req.body);
-
-        //vals.userid = userid;
-
-    // const vals = [enjoyment, sadness, anger, contempt, disgust, fear, 
-    //     surprise, context, datetimerecord, userid];
 
 exports.selectSnapshot = (req, res) => {
     const session = req.session;
 
-    //console.log(session);
-
     const { isloggedin, userid } = req.session;
 
     const { id } = req.params;
-
-    //console.log(isloggedin);
-
-    // const selectSQL = `SELECT * FROM emotiondata WHERE emotion_data_id = ${id}`;
-    // conn.query(selectSQL, (err, rows) => {
-    //     if (err) {
-    //         throw err;
-    //     } else {
-    //         console.log(rows);
-    //         res.render('editsnapshot', { loggedin: isloggedin, details: rows });
-    //     }
-    // });
 
     const endpoint = `http://localhost:3002/snapshot/selectsnapshot/${id}`;
 
@@ -344,24 +240,12 @@ exports.selectSnapshot = (req, res) => {
         .get(endpoint, config)
         .then((response) => {
             const data = response.data.result;
-            //console.log('Promise resolved!');
-            //console.log(response.data);
             res.render('editsnapshot', { loggedin: isloggedin, details: data });
         })
         .catch((error) => {
             console.log('Promise rejected!');
             console.log(error.response);
         });
-
-
-
-
-
-
-
-
-
-
 };
 
 
@@ -374,19 +258,9 @@ exports.updateSnapshot = async (req, res) => {
 
     const { id } = req.params;
 
-    //const emotion_data_id = req.params.snapshotid;  
     const { context } = req.body;
     const vals = { context, id };
     console.log('VALS ARE ' + vals);
-
-    // const updateSQL = `UPDATE emotiondata SET context_trigger = ? WHERE emotion_data_id = ${id}`;
-    // conn.query(updateSQL, vals, (err, rows) => {
-    //     if (err) {
-    //         throw err;
-    //     } else {
-    //         res.redirect('/dashboard');
-    //     }
-    // });
 
     const endpoint = `http://localhost:3002/snapshot/updatesnapshot/${id}`;
 
@@ -394,14 +268,8 @@ exports.updateSnapshot = async (req, res) => {
         .put(endpoint, vals)
         .then((response) => {
             console.log(response.data);
-            // const status = response.status;
-            // if (status === 200) {
-            //     res.redirect('/dashboard');
-            // } else {
-            //     console.log(response.status);
-            //     console.log(response.data);
+
             res.redirect('/dashboard');
-            // }
         })
         .catch((error) => {
             console.log(`Error making API request: ${error}`);
@@ -411,7 +279,6 @@ exports.updateSnapshot = async (req, res) => {
 
 
 exports.deleteSnapshot = async (req, res) => {
-    //const run_id = req.params.id;
 
     const { id } = req.params;
     console.log('>>>>>>ID IS ' + id);
@@ -427,16 +294,8 @@ exports.deleteSnapshot = async (req, res) => {
         .catch((error) => {
             console.log(`Error making API request: ${error}`)
         });
-
-    // const deleteSQL = `DELETE  FROM emotiondata WHERE emotion_data_id = ${id}`;
-    // conn.query(deleteSQL, (err, rows) => {
-    //     if (err) {
-    //         throw err;
-    //     } else {
-    //         res.redirect('/dashboard');
-    //     }
-    // });
 };
+
 
 exports.getLogout = (req, res) => {
     req.session.destroy(() => {

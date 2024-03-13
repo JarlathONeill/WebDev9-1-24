@@ -11,9 +11,6 @@ router.get('/logout', controller.getLogout);
 router.get('/dashboard', controller.getDashboard);
 router.get('/addsnapshot', controller.getNewSnap);
 
-
-
-
 router.post('/editsnapshot/:id', controller.updateSnapshot);
 router.post('/deletesnapshot/:id', controller.deleteSnapshot);
 router.post('/register', controller.postRegister);

@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a class="nav-link" aria-current="page" href="/">Home</a>
                     </li>
                     <% if (!loggedin) { %>
                         <li class="nav-item">
@@ -44,16 +44,12 @@
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <!--<li><a class="dropdown-item" href="#">Something else here</a></li>-->
                                     </ul>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/logout">Logout</a>
                                 </li>
                                 <% } %>
-                                    <!--<li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-              </li>-->
                 </ul>
                 </form>
             </div>
@@ -61,33 +57,55 @@
     </nav>
 
     <% for (let row of details) { %>
-        <% var snapshotid = row.emotion_data_id; %>
-        <% var context = row.context_trigger %>
-        <% } %>
+        <% var snapshotid=row.emotion_data_id; %>
+            <% var context=row.context_trigger %>
+                <% } %>
 
-    <div class="container-lg py-5 h-100">
-        <form action="/editsnapshot/<%= snapshotid %>" method="post">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                        <div class="card-body p-5 text-center">
-                            <h1>EDIT SNAPSHOT</h1>
+                    <% if (loggedin) { %>
+                        <div class="container-lg py-5 h-100">
+                            <form action="/editsnapshot/<%= snapshotid %>" method="post">
+                                <div class="row d-flex justify-content-center align-items-center h-100">
+                                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                                        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                                            <div class="card-body p-5 text-center">
+                                                <h1>EDIT SNAPSHOT</h1>
 
-                            <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Context:</label>
-                                <input class="form-control" id="exampleFormControlTextarea1" rows="3" name="context" value="<%= context %>" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Update</button>
+                                                <div class="mb-3">
+                                                    <label for="exampleFormControlTextarea1"
+                                                        class="form-label">Context:</label>
+                                                    <input class="form-control" id="exampleFormControlTextarea1"
+                                                        rows="3" name="context" value="<%= context %>" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Update</button>
 
-                            
-                            <button type="submit" class="btn btn-danger" formaction="/deletesnapshot/<%= snapshotid %>">Delete</button>
-                            
+                                                <button type="submit" class="btn btn-danger"
+                                                    formaction="/deletesnapshot/<%= snapshotid %>">Delete</button>
 
-
-
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+                        <% } %>
+                            <% if (!loggedin) { %>
+                                <div
+                                    class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
+                                    <div class="col-md-6 p-lg-5 mx-auto my-5">
+                                        <h1 class="display-3 fw-bold">Track your emotional state</h1>
+                                        <h3 class="fw-normal text-muted mb-3">Mood Pulse lets you track your emotions
+                                            easily </h3>
+                                        <div class="d-flex gap-3 justify-content-center lead fw-normal">
+
+                                            <a class="icon-link" href="/login">
+                                                Login
+                                                <svg class="bi">
+                                                    <use xlink:href="#chevron-right"></use>
+                                                </svg>
+                                            </a>
+                                            <a class="icon-link" href="/register">
+                                                Register
+                                                <svg class="bi">
+                                                    <use xlink:href="#chevron-right"></use>
+                                                </svg>
+                                                <% } %>

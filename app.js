@@ -18,8 +18,6 @@ app.use(session({
 app.use('/', router);
 app.set('view engine', 'ejs');
 
-//test
-
 app.listen(process.env.PORT, (err) => {
     if (err) return console.log(err);
     console.log(`Express listening on port ${process.env.PORT}`);
