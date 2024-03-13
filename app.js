@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config({ path: './config.env' });
 const router = require('./routes/scheduleroutes');
 const path = require('path');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 
 const app = express();
 

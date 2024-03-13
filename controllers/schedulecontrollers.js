@@ -1,6 +1,7 @@
 //const conn = require('./../utils/dbconn');
 const axios = require('axios');
 //const { get } = require('../utils/fetch')
+const bcrypt = require('bcrypt');
 
 exports.getHome = (req, res) => {
     const { isloggedin } = req.session;
@@ -25,6 +26,8 @@ exports.postRegister = async (req, res) => {
 
     //deconstructing and getting user info from registration input
     const vals = { firstname, lastname, email, userpass } = req.body;
+
+
 
     //variable for error message
     const nodata = "Please enter your first name, last name, email and password";
