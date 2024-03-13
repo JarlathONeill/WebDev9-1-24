@@ -1,4 +1,4 @@
-const conn = require('./../utils/dbconn');
+//const conn = require('./../utils/dbconn');
 const axios = require('axios');
 //const { get } = require('../utils/fetch')
 
@@ -25,57 +25,35 @@ exports.postRegister = async (req, res) => {
 
     //deconstructing and getting user info from registration input
     const vals = { firstname, lastname, email, userpass } = req.body;
-    //const vals = [firstname, lastname, email, userpass];
 
     //variable for error message
     const nodata = "Please enter your first name, last name, email and password";
 
-    //SQL to be used
-    const checkdetailsSQL = `SELECT * FROM user WHERE email = '${email}'`;
-    const insertSQL = 'INSERT into user (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
-
-
-    // conn.query(checkdetailsSQL, [email], async (err, result) => {
-    //     if (err) throw err;
-
-    //     //check if user has missed any input boxes
-    //     if (!firstname || !lastname || !email || !userpass) {
-    //         message = "Please enter your first name, last name, email and password";
-    //         return res.render('register', { loggedin: isloggedin, regError: true, message: message });
-    //         //return res.status(400).send('Please enter your first name, last name, email and password');
-    //     } else if (result.length > 0) {
-    //         //return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
-    //         message = 'Email has already been registered';
-    //         return res.render('register', { loggedin: isloggedin, regError: true, message: message });
-    //     } else {
-    //         conn.query(insertSQL, vals, async (err, rows) => {
-    //             if (err) throw err;
-    //             //console.log(vals);
-
-    //             res.redirect('login');
-    //         });
-    //     };
-    // });
 
     const endpoint = `http://localhost:3002/users/register`;
 
     await axios
-        .post(endpoint, vals)
+        .post(endpoint, vals, {maxRedirects: 0})
         .then((response) => {
             const data = response.data;
+            const status = response.status;
+            console.log(data);
 
-            if (data.message === 'Details already in use') {
-                message = 'Email has already been registered';
-                return res.render('register', { loggedin: isloggedin, regError: true, message: message });
-
+            if (status === 200) {
+                console.log(status);
+                res.redirect('/dashboard');
+                
+            } else {
+                message = data.message;
+                res.render('register', {loggedin: false, regError: true, message: message});
             }
-            res.redirect('/dashboard');
-
         })
+        
         .catch((error) => {
             console.log(`Error making API request: ${error}`);
         });
 };
+
 
 exports.getLogin = (req, res) => {
     var logError = false;
@@ -117,9 +95,6 @@ exports.postLogin = async (req, res) => {
 exports.getDashboard = async (req, res) => {
     var userinfo = {};
 
-    //const session = req.session;
-    //console.log(session);
-
     const { isloggedin, userid } = req.session;
     console.log(`User logged in: ${isloggedin}, ${userid}`);
 
@@ -127,7 +102,6 @@ exports.getDashboard = async (req, res) => {
     if (isloggedin) {
 
         const endpoint1 = `http://localhost:3002/users/${userid}`;
-
         axios
             .get(endpoint1)
             .then((response) => {
@@ -149,7 +123,6 @@ exports.getDashboard = async (req, res) => {
 
 
         const endpoint2 = `http://localhost:3002/snapshot/getdashboard`;
-
         axios
             .get(endpoint2)
             .then((response) => {
