@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 11, 2024 at 12:27 AM
+-- Generation Time: Mar 13, 2024 at 07:33 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -46,10 +46,8 @@ CREATE TABLE `emotiondata` (
 --
 
 INSERT INTO `emotiondata` (`emotion_data_id`, `date_time_record`, `enjoyment`, `sadness`, `anger`, `contempt`, `disgust`, `fear`, `surprise`, `context_trigger`, `user_id`) VALUES
-(6, '2024-02-06 19:45:50', 1, 1, 1, 1, 1, 1, 1, '1', 10),
-(8, '2024-02-19 21:13:00', 1, 1, 1, 1, 1, 1, 1, 'test\r\n', 10),
-(9, '2024-02-25 13:32:00', 10, 1, 3, 1, 1, 6, 10, 'Surprise party', 10),
-(10, '2024-03-10 15:47:04', 3, 4, 8, 1, 6, 2, 4, 'testing api with other profile', 11);
+(28, '2024-03-13 16:34:00', 6, 6, 6, 6, 6, 6, 6, 'Snap 1', 72),
+(29, '2024-03-13 16:34:00', 6, 6, 6, 6, 6, 6, 6, 'Snap 1', 72);
 
 -- --------------------------------------------------------
 
@@ -70,9 +68,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `first_name`, `last_name`, `email`, `password`) VALUES
-(9, 'first in list', 'new', 'test1@gmail.com', 'test123'),
-(10, 'test1', 'test2', 'test@gmail.com', 'test123'),
-(11, 'jarlath', 'oneill', 'jarlath.oneill95@gmail.com', 'password');
+(72, 'Post', 'Man', 'postman@gmail.com', '$2b$13$m0gVBK3mKqnbstZWGvVPcOOg/Dk8t7969ahtDnv31gp78EOimziBi'),
+(73, 'John', 'Test', 'johntest@gmail.com', '$2b$13$Y3JDyd2O1OfL4GKeFDcqQucSeVzbJGdYi9RVBVfpWAWDiZas9tyAy');
 
 --
 -- Indexes for dumped tables
@@ -99,13 +96,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `emotiondata`
 --
 ALTER TABLE `emotiondata`
-  MODIFY `emotion_data_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `emotion_data_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- Constraints for dumped tables

@@ -21,17 +21,11 @@ exports.getRegister = (req, res) => {
 exports.postRegister = async (req, res) => {
     var message = "";
 
-    const session = req.session;
-    const { isloggedin } = req.session;
+    // const session = req.session;
+    // const { isloggedin } = req.session;
 
     //deconstructing and getting user info from registration input
     const vals = { firstname, lastname, email, userpass } = req.body;
-
-
-
-    //variable for error message
-    const nodata = "Please enter your first name, last name, email and password";
-
 
     const endpoint = `http://localhost:3002/users/register`;
 

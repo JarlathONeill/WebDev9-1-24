@@ -1,7 +1,8 @@
 const express = require('express');
+const router = express.Router({mergeParams: true});
 const controller = require('./../controllers/schedulecontrollers');
 //const conn = require('../utils/dbconn');
-const router = express.Router({mergeParams: true});
+
 
 router.get('/', controller.getHome);
 router.get('/register', controller.getRegister);
