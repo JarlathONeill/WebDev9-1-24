@@ -118,6 +118,12 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Submit</button>
+                                
+                                <% if (logError) { %>
+                                    <div class="alert alert-danger" role="alert" id="error">
+                                      <%= message %>
+                                    </div>
+                                    <% } %>
 
                             </div>
                         </div>

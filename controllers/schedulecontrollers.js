@@ -174,28 +174,40 @@ exports.postRegister = async (req, res) => {
 
 
     exports.getNewSnap = (req, res) => {
+        var logError = false;
         const session = req.session;
 
         const { isloggedin, userid } = req.session;
 
-        res.render('addsnapshot', { loggedin: isloggedin });
+        res.render('addsnapshot', { loggedin: isloggedin, logError: logError });
     };
 
 
 
     exports.postNewSnap = async (req, res) => {
         const login = { isloggedin, userid } = req.session;
+        var logError = false;
 
-        const vals = {
+        const  {
             enjoyment, sadness, anger, contempt, disgust, fear,
             surprise, context, datetimerecord
         } = req.body;
+
+        const vals =  {
+            enjoyment, sadness, anger, contempt, disgust, fear,
+            surprise, context, datetimerecord, userid
+        }
+
+        if (!context || !datetimerecord) {
+            message = "Please enter some context and a date/time";
+            return res.render('addsnapshot', { loggedin: isloggedin, logError: true, message: message });
+        }
 
         const endpoint = `http://localhost:3002/snapshot/addsnapshot`;
 
         //ChatGPT helped with adding in the values to pass from Axios to http://localhost:3002/snapshot/addsnapshot
         await axios
-            .post(endpoint, { enjoyment, sadness, anger, contempt, disgust, fear, surprise, context, datetimerecord, userid })
+            .post(endpoint, vals)
             .then((response) => {
                 const data = response.data;
                 res.redirect('/dashboard');
