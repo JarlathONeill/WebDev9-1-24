@@ -37,7 +37,9 @@ exports.postRegister = async (req, res) => {
             console.log(data);
 
             if (status === 200) {
-                console.log(status);
+                const userId = data.result.insertId;
+                req.session.isloggedin = true;
+                req.session.userid = userId;
                 res.redirect('/dashboard');
                 
             } else {
