@@ -60,7 +60,7 @@
     </nav>
 
     <% if (loggedin) { %>
-        <h2>
+        <h1 class="text-center">
             <%= `${user.name}'s Dashboard `%>
         </h2>
 
@@ -70,8 +70,8 @@
 
                 <% if (loggedin) { %>
                     <% if (records.length> 0) { %>
-                        <div class="col-md-6 p-lg-5 mx-auto my-5">
-                            <canvas id="bkgcanvas" width="500px" height="500px"></canvas>
+                        <div class="container-lg py-4 h-50" >
+                            <canvas id="bkgcanvas" ></canvas>
                         </div>
 
                         <div class="table-responsive small">
@@ -185,7 +185,7 @@
                                             type: 'bar',
                                             data: chartdata,
                                             options: {
-                                                responsive: false,
+                                                responsive: true,
                                                 animation: true,
                                                 maintainAspectRatio: true,
                                                 scales: { y: { min: 0, max: maxAmount, ticks: { stepSize: 1 } } },
