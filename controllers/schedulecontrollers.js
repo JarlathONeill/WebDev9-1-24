@@ -52,6 +52,28 @@ exports.postRegister = async (req, res) => {
         });
 };
 
+    // conn.query(checkdetailsSQL, [email], async (err, result) => {
+    //     if (err) throw err;
+
+    //     //check if user has missed any input boxes
+    //     if (!firstname || !lastname || !email || !userpass) {
+    //         message = "Please enter your first name, last name, email and password";
+    //         return res.render('register', { loggedin: isloggedin, regError: true, message: message });
+    //         //return res.status(400).send('Please enter your first name, last name, email and password');
+    //     } else if (result.length > 0) {
+    //         //return res.render('register', { loggedin: isloggedin, errmsg: "email already in use" });
+    //         message = 'Email has already been registered';
+    //         return res.render('register', { loggedin: isloggedin, regError: true, message: message });
+    //     } else {
+    //         conn.query(insertSQL, vals, async (err, rows) => {
+    //             if (err) throw err;
+    //             //console.log(vals);
+
+    //             res.redirect('login');
+    //         });
+    //     };
+    // });
+
 
 exports.getLogin = (req, res) => {
     var logError = false;
